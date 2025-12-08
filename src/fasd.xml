@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cloudSync>
+    <configuracion>
+        <centrosDatos>
+            <centro id="DC001" nombre="Guatemala Norte">
+                <capacidad>
+                    <cpu>200</cpu>
+                    <ram>512</ram>
+                    <almacenamiento>3000</almacenamiento>
+                </capacidad>
+                <ubicacion>
+                    <ciudad>Guatemala</ciudad>
+                </ubicacion>
+            </centro>
+
+            <centro id="DC002" nombre="Guatemala Este">
+                <capacidad>
+                    <cpu>150</cpu>
+                    <ram>256</ram>
+                    <almacenamiento>1500</almacenamiento>
+                </capacidad>
+                <ubicacion>
+                    <ciudad>Villa Nueva</ciudad>
+                </ubicacion>
+            </centro>
+
+            <centro id="DC003" nombre="Guatemala Sur">
+                <capacidad>
+                    <cpu>300</cpu>
+                    <ram>1024</ram>
+                    <almacenamiento>5000</almacenamiento>
+                </capacidad>
+                <ubicacion>
+                    <ciudad>Mixco</ciudad>
+                </ubicacion>
+            </centro>
+
+            <centro id="DC004" nombre="Guatemala Oeste">
+                <capacidad>
+                    <cpu>100</cpu>
+                    <ram>128</ram>
+                    <almacenamiento>1000</almacenamiento>
+                </capacidad>
+                <ubicacion>
+                    <ciudad>Zona 11</ciudad>
+                </ubicacion>
+            </centro>
+
+            <centro id="DC005" nombre="Antigua">
+                <capacidad>
+                    <cpu>250</cpu>
+                    <ram>768</ram>
+                    <almacenamiento>3500</almacenamiento>
+                </capacidad>
+                <ubicacion>
+                    <ciudad>Antigua Guatemala</ciudad>
+                </ubicacion>
+            </centro>
+
+            <centro id="DC006" nombre="Petén">
+                <capacidad>
+                    <cpu>400</cpu>
+                    <ram>2048</ram>
+                    <almacenamiento>8000</almacenamiento>
+                </capacidad>
+                <ubicacion>
+                    <ciudad>Flores</ciudad>
+                </ubicacion>
+            </centro>
+        </centrosDatos>
+        <maquinasVirtuales>
+            <vm id="VM001" centroAsignado="DC001">
+                <sistemaOperativo>Ubuntu Server 22.04</sistemaOperativo>
+                <recursos>
+                    <cpu>40</cpu>
+                    <ram>64</ram>
+                    <almacenamiento>500</almacenamiento>
+                </recursos>
+                <ip>192.168.10.10</ip>
+                <contenedores>
+                    <contenedor id="CT001">
+                        <nombre>API-PY</nombre>
+                        <imagen>python:3.10</imagen>
+                        <recursos>
+                            <cpu>10</cpu>
+                            <ram>16</ram>
+                        </recursos>
+                        <puerto>8000</puerto>
+                    </contenedor>
+                    <contenedor id="CT002">
+                        <nombre>DB-PG</nombre>
+                        <imagen>postgres:15</imagen>
+                        <recursos>
+                            <cpu>20</cpu>
+                            <ram>32</ram>
+                        </recursos>
+                        <puerto>5432</puerto>
+                    </contenedor>
+                </contenedores>
+            </vm>
+
+            <vm id="VM002" centroAsignado="DC001">
+                <sistemaOperativo>Windows Server</sistemaOperativo>
+                <recursos>
+                    <cpu>30</cpu>
+                    <ram>16</ram>
+                    <almacenamiento>200</almacenamiento>
+                </recursos>
+                <ip>192.168.10.11</ip>
+                <contenedores>
+                    <contenedor id="CT003">
+                        <nombre>Web-NGX</nombre>
+                        <imagen>nginx:1.24</imagen>
+                        <recursos>
+                            <cpu>5</cpu>
+                            <ram>4</ram>
+                        </recursos>
+                        <puerto>80</puerto>
+                    </contenedor>
+                </contenedores>
+            </vm>
+            <vm id="VM003" centroAsignado="DC002">
+                <sistemaOperativo>Debian 11</sistemaOperativo>
+                <recursos>
+                    <cpu>10</cpu>
+                    <ram>8</ram>
+                    <almacenamiento>50</almacenamiento>
+                </recursos>
+                <ip>192.168.11.10</ip>
+                <contenedores>
+                    <contenedor id="CT004">
+                        <nombre>Cache</nombre>
+                        <imagen>redis:7</imagen>
+                        <recursos>
+                            <cpu>2</cpu>
+                            <ram>4</ram>
+                        </recursos>
+                        <puerto>6379</puerto>
+                    </contenedor>
+                </contenedores>
+            </vm>
+
+            <vm id="VM004" centroAsignado="DC003">
+                <sistemaOperificado>Rocky Linux</sistemaOperificado> 
+                <recursos>
+                    <cpu>60</cpu>
+                    <ram>128</ram>
+                    <almacenamiento>1000</almacenamiento>
+                </recursos>
+                <ip>192.168.12.5</ip>
+                <contenedores>
+                    <contenedor id="CT005">
+                        <nombre>ProxyA</nombre>
+                        <imagen>haproxy:2</imagen>
+                        <recursos>
+                            <cpu>5</cpu>
+                            <ram>8</ram>
+                        </recursos>
+                        <puerto>443</puerto>
+                    </contenedor>
+                    <contenedor id="CT006">
+                        <nombre>ProxyB</nombre>
+                        <imagen>haproxy:2</imagen>
+                        <recursos>
+                            <cpu>5</cpu>
+                            <ram>8</ram>
+                        </recursos>
+                        <puerto>444</puerto>
+                    </contenedor>
+                </contenedores>
+            </vm>
+
+            <vm id="VM005" centroAsignado="DC004">
+                <sistemaOperativo>Fedora Server</sistemaOperativo>
+                <recursos>
+                    <cpu>15</cpu>
+                    <ram>32</ram>
+                    <almacenamiento>200</almacenamiento>
+                </recursos>
+                <ip>192.168.13.8</ip>
+                <contenedores>
+                    <contenedor id="CT007">
+                        <nombre>Logs</nombre>
+                        <imagen>graylog:4</imagen>
+                        <recursos>
+                            <cpu>4</cpu>
+                            <ram>8</ram>
+                        </recursos>
+                        <puerto>9000</puerto>
+                    </contenedor>
+                </contenedores>
+            </vm>
+
+
+            <vm id="VM006" centroAsignado="DC005">
+                <sistemaOperativo>CentOS</sistemaOperativo>
+                <recursos>
+                    <cpu>40</cpu>
+                    <ram>64</ram>
+                    <almacenamiento>250</almacenamiento>
+                </recursos>
+                <ip>192.168.14.2</ip>
+                <contenedores>
+                    <contenedor id="CT008">
+                        <nombre>ERP</nombre>
+                        <imagen>odoo:16</imagen>
+                        <recursos>
+                            <cpu>10</cpu>
+                            <ram>16</ram>
+                        </recursos>
+                        <puerto>8069</puerto>
+                    </contenedor>
+                    <contenedor id="CT009">
+                        <nombre>Invoices</nombre>
+                        <imagen>mariadb:10.5</imagen>
+                        <recursos>
+                            <cpu>12</cpu>
+                            <ram>24</ram>
+                        </recursos>
+                        <puerto>3306</puerto>
+                    </contenedor>
+                </contenedores>
+            </vm>
+
+            <vm id="VM007" centroAsignado="DC006">
+                <sistemaOperativo>Ubuntu</sistemaOperativo>
+                <recursos>
+                    <cpu>100</cpu>
+                    <ram>512</ram>
+                    <almacenamiento>1000</almacenamiento>
+                </recursos>
+                <ip>192.168.15.9</ip>
+                <contenedores>
+                    <contenedor id="CT010">
+                        <nombre>Analytics</nombre>
+                        <imagen>spark:latest</imagen>
+                        <recursos>
+                            <cpu>20</cpu>
+                            <ram>128</ram>
+                        </recursos>
+                        <puerto>7077</puerto>
+                    </contenedor>
+                    <contenedor id="CT011">
+                        <nombre>ML Worker</nombre>
+                        <imagen>pytorch:2.0</imagen>
+                        <recursos>
+                            <cpu>30</cpu>
+                            <ram>128</ram>
+                        </recursos>
+                        <puerto>6006</puerto>
+                    </contenedor>
+                </contenedores>
+            </vm>
+
+            <vm id="VM008" centroAsignado="DC006">
+                <sistemaOperativo>AlmaLinux</sistemaOperativo>
+                <recursos>
+                    <cpu>30</cpu>
+                    <ram>64</ram>
+                    <almacenamiento>250</almacenamiento>
+                </recursos>
+                <ip>192.168.15.10</ip>
+                <contenedores>
+                    <contenedor id="CT012">
+                        <nombre>Grafana</nombre>
+                        <imagen>grafana:latest</imagen>
+                        <recursos>
+                            <cpu>4</cpu>
+                            <ram>8</ram>
+                        </recursos>
+                        <puerto>3000</puerto>
+                    </contenedor>
+                </contenedores>
+            </vm>
+
+            <vm id="VM009" centroAsignado="DC006">
+                <sistemaOperativo>Debian 12</sistemaOperativo>
+                <recursos>
+                    <cpu>20</cpu>
+                    <ram>32</ram>
+                    <almacenamiento>150</almacenamiento>
+                </recursos>
+                <ip>192.168.15.11</ip>
+                <contenedores>
+                    <contenedor id="CT013">
+                        <nombre>Queue</nombre>
+                        <imagen>rabbitmq:3</imagen>
+                        <recursos>
+                            <cpu>5</cpu>
+                            <ram>8</ram>
+                        </recursos>
+                        <puerto>5672</puerto>
+                    </contenedor>
+                    <contenedor id="CT014">
+                        <nombre>Worker</nombre>
+                        <imagen>node:18</imagen>
+                        <recursos>
+                            <cpu>8</cpu>
+                            <ram>16</ram>
+                        </recursos>
+                        <puerto>9001</puerto>
+                    </contenedor>
+                </contenedores>
+
+            </vm>
+
+        </maquinasVirtuales>
+        <solicitudes>
+            <solicitud id="RQ001">
+                <cliente>Banco Industrial</cliente>
+                <tipo>deploy</tipo>
+                <prioridad>8</prioridad>
+                <recursos>
+                    <cpu>50</cpu>
+                    <ram>64</ram>
+                    <almacenamiento>500</almacenamiento>
+                </recursos>
+                <tiempoEstimado>120</tiempoEstimado>
+            </solicitud>
+
+            <solicitud id="RQ002">
+                <cliente>Claro Guatemala</cliente>
+                <tipo>deploy</tipo>
+                <prioridad>10</prioridad>
+                <recursos>
+                    <cpu>80</cpu>
+                    <ram>120</ram>
+                    <almacenamiento>1200</almacenamiento>
+                </recursos>
+                <tiempoEstimado>210</tiempoEstimado>
+            </solicitud>
+
+            <solicitud id="RQ003">
+                <cliente>Cervecería Centroamericana</cliente>
+                <tipo>deploy</tipo>
+                <prioridad>3</prioridad>
+                <recursos>
+                    <cpu>10</cpu>
+                    <ram>16</ram>
+                    <almacenamiento>100</almacenamiento>
+                </recursos>
+                <tiempoEstimado>35</tiempoEstimado>
+            </solicitud>
+
+            <solicitud id="RQ004">
+                <cliente>PAIZ</cliente>
+                <tipo>deploy</tipo>
+                <prioridad>6</prioridad>
+                <recursos>
+                    <cpu>20</cpu>
+                    <ram>32</ram>
+                    <almacenamiento>250</almacenamiento>
+                </recursos>
+                <tiempoEstimado>80</tiempoEstimado>
+            </solicitud>
+
+            <solicitud id="RQ005">
+                <cliente>Maxi Despensa</cliente>
+                <tipo>deploy</tipo>
+                <prioridad>9</prioridad>
+                <recursos>
+                    <cpu>60</cpu>
+                    <ram>96</ram>
+                    <almacenamiento>400</almacenamiento>
+                </recursos>
+                <tiempoEstimado>160</tiempoEstimado>
+            </solicitud>
+        </solicitudes>
+
+    </configuracion>
+    <instrucciones>
+        <instruccion tipo="mostrarCentros"> Mostrar centros </instruccion>
+        <instruccion tipo="buscarVM"> VM007 </instruccion>
+        <instruccion tipo="migrarVM"> VM001, DC006 </instruccion>
+        <instruccion tipo="migrarVM"> VM006, DC003 </instruccion>
+    </instrucciones>
+
+</cloudSync>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<cloudSync>
+    <configuracion>
+        <centrosDatos>
+            <centro id="DC001" nombre="Guatemala Norte">
+                <capacidad>
+                    <cpu>120</cpu>
+                    <ram>256</ram>
+                    <almacenamiento>1000</almacenamiento>
+                </capacidad>
+                <ubicacion>
+                    <ciudad>Guatemala</ciudad>
+                </ubicacion>
+            </centro>
+            <centro id="DC002" nombre="Guatemala Sur">
+                <capacidad>
+                    <cpu>200</cpu>
+                    <ram>512</ram>
+                    <almacenamiento>1800</almacenamiento>
+                </capacidad>
+                <ubicacion>
+                    <ciudad>Mixco</ciudad>
+                </ubicacion>
+            </centro>
+        </centrosDatos>
+
+        <maquinasVirtuales>
+            <vm id="VM001" centroAsignado="DC001">
+                <sistemaOperativo>Ubuntu Server</sistemaOperativo>
+                <recursos>
+                    <cpu>20</cpu>
+                    <ram>32</ram>
+                    <almacenamiento>200</almacenamiento>
+                </recursos>
+                <ip>192.168.10.5</ip>
+                <contenedores>
+                    <contenedor id="CT001">
+                        <nombre>API</nombre>
+                        <imagen>python:3.10</imagen>
+                        <recursos>
+                            <cpu>5</cpu>
+                            <ram>8</ram>
+                        </recursos>
+                        <puerto>8000</puerto>
+                    </contenedor>
+                </contenedores>
+            </vm>
+        </maquinasVirtuales>
+
+        <solicitudes>
+            <solicitud id="RQ001">
+                <cliente>Banco</cliente>
+                <tipo>deploy</tipo>
+                <prioridad>5</prioridad>
+                <recursos>
+                    <cpu>10</cpu>
+                    <ram>16</ram>
+                    <almacenamiento>50</almacenamiento>
+                </recursos>
+                <tiempoEstimado>60</tiempoEstimado>
+            </solicitud>
+        </solicitudes>
+    </configuracion>
+
+    <instrucciones>
+        <instruccion tipo="mostrarCentros">
+            Mostrar centros
+        </instruccion>
+    </instrucciones>
+</cloudSync>

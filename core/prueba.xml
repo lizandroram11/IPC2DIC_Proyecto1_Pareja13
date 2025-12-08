@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cloudSync>
+    <configuracion>
+        <centrosDatos>
+            <centro id="DC001" nombre="Guatemala Norte">
+                <capacidad>
+                    <cpu>120</cpu>
+                    <ram>256</ram>
+                    <almacenamiento>1000</almacenamiento>
+                </capacidad>
+                <ubicacion>
+                    <ciudad>Guatemala</ciudad>
+                </ubicacion>
+            </centro>
+            <centro id="DC002" nombre="Guatemala Sur">
+                <capacidad>
+                    <cpu>200</cpu>
+                    <ram>512</ram>
+                    <almacenamiento>1800</almacenamiento>
+                </capacidad>
+                <ubicacion>
+                    <ciudad>Mixco</ciudad>
+                </ubicacion>
+            </centro>
+        </centrosDatos>
+
+        <maquinasVirtuales>
+            <vm id="VM001" centroAsignado="DC001">
+                <sistemaOperativo>Ubuntu Server</sistemaOperativo>
+                <recursos>
+                    <cpu>20</cpu>
+                    <ram>32</ram>
+                    <almacenamiento>200</almacenamiento>
+                </recursos>
+                <ip>192.168.10.5</ip>
+                <contenedores>
+                    <contenedor id="CT001">
+                        <nombre>API</nombre>
+                        <imagen>python:3.10</imagen>
+                        <recursos>
+                            <cpu>5</cpu>
+                            <ram>8</ram>
+                        </recursos>
+                        <puerto>8000</puerto>
+                    </contenedor>
+                </contenedores>
+            </vm>
+        </maquinasVirtuales>
+
+        <solicitudes>
+            <solicitud id="RQ001">
+                <cliente>Banco</cliente>
+                <tipo>deploy</tipo>
+                <prioridad>5</prioridad>
+                <recursos>
+                    <cpu>10</cpu>
+                    <ram>16</ram>
+                    <almacenamiento>50</almacenamiento>
+                </recursos>
+                <tiempoEstimado>60</tiempoEstimado>
+            </solicitud>
+        </solicitudes>
+    </configuracion>
+
+    <instrucciones>
+        <instruccion tipo="mostrarCentros">
+            Mostrar centros
+        </instruccion>
+    </instrucciones>
+</cloudSync>

@@ -49,7 +49,7 @@ class XMLHandler:
             self.leer_solicitudes(root)
             self.leer_instrucciones(root)
 
-            # Después de cargar TODO, vincular VMs con su centro
+            # Después de cargar todo, vincular VMs con su centro
             self.relacionar_vms_con_centro()
 
             # Vincular contenedores con sus VMs
