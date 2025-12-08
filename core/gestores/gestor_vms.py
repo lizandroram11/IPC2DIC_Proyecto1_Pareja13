@@ -1,40 +1,62 @@
-# core/gestores/gestor_vms.py
-
 from core.modelos.maquina_virtual import MaquinaVirtual
 
 class GestorVMs:
     def __init__(self, gestor_centros):
+        # Referencia al gestor de centros para acceder a los recursos
         self.centros = gestor_centros
 
+    
+    # Agregar VM desde el lector XML
     def agregar_vm(self, vm, id_centro):
+        """
+        Inserta una VM en el centro correspondiente.
+        Este método se usa al cargar el archivo XML.
+        """
         centro = self.centros.buscar(id_centro)
         if centro:
             centro.vms.insertar(vm)
 
+
+    # Crear VM desde una instrucción <crearVM>-
     def crear_vm_instruccion(self, vm, id_centro):
+
         centro = self.centros.buscar(id_centro)
         if centro is None:
             return False
 
+        # Validación de recursos
         if (centro.cpu_usado + vm.cpu > centro.cpu_total or
             centro.ram_usado + vm.ram > centro.ram_total or
-            centro.alm_usado + vm.almacenamiento > centro.alm_total):
+            centro.alm_usado + vm.alm > centro.alm_total):
             return False
 
+        # Asignar recursos
         centro.cpu_usado += vm.cpu
         centro.ram_usado += vm.ram
-        centro.alm_usado += vm.almacenamiento
+        centro.alm_usado += vm.alm
 
+        # Insertar VM
         centro.vms.insertar(vm)
         return True
 
+    
+    # Migrar VM entre centros
+
     def migrar_vm(self, vm_id, origen_id, destino_id):
+        """
+        Migra una VM de un centro a otro.
+        Verifica:
+            - Que ambos centros existan
+            - Que la VM exista en el centro origen
+            - Que el centro destino tenga recursos suficientes
+        """
         centro_origen = self.centros.buscar(origen_id)
         centro_destino = self.centros.buscar(destino_id)
 
         if centro_origen is None or centro_destino is None:
             return False
 
+        # Buscar la VM dentro del centro origen
         nodo = centro_origen.vms.primero
         vm_encontrada = None
 
@@ -47,40 +69,52 @@ class GestorVMs:
         if vm_encontrada is None:
             return False
 
+        # Validar recursos en el centro destino
         if (centro_destino.cpu_usado + vm_encontrada.cpu > centro_destino.cpu_total or
             centro_destino.ram_usado + vm_encontrada.ram > centro_destino.ram_total or
-            centro_destino.alm_usado + vm_encontrada.almacenamiento > centro_destino.alm_total):
+            centro_destino.alm_usado + vm_encontrada.alm > centro_destino.alm_total):
             return False
 
+        # Liberar recursos del centro origen
         centro_origen.cpu_usado -= vm_encontrada.cpu
         centro_origen.ram_usado -= vm_encontrada.ram
-        centro_origen.alm_usado -= vm_encontrada.almacenamiento
+        centro_origen.alm_usado -= vm_encontrada.alm
 
+        # Eliminar VM del centro origen
         self._eliminar_vm_de_centro(centro_origen, vm_id)
 
+        # Asignar recursos al centro destino
         centro_destino.cpu_usado += vm_encontrada.cpu
         centro_destino.ram_usado += vm_encontrada.ram
-        centro_destino.alm_usado += vm_encontrada.almacenamiento
+        centro_destino.alm_usado += vm_encontrada.alm
 
+        # Insertar VM en el centro destino
         centro_destino.vms.insertar(vm_encontrada)
         vm_encontrada.centro = destino_id
 
         return True
 
+   
+    # Eliminar VM de un centro (ListaSimple)
     def _eliminar_vm_de_centro(self, centro, vm_id):
+        """
+        Elimina una VM de la lista simple de un centro.
+        IMPORTANTE:
+            La lista de VMs es ListaSimple, NO tiene anterior ni ultimo.
+        """
         actual = centro.vms.primero
+        anterior = None
 
         while actual:
             if actual.valor.id == vm_id:
-                if actual == centro.vms.primero:
+
+                # Caso: eliminar el primero
+                if anterior is None:
                     centro.vms.primero = actual.siguiente
-                    if centro.vms.primero:
-                        centro.vms.primero.anterior = None
-                elif actual == centro.vms.ultimo:
-                    centro.vms.ultimo = actual.anterior
-                    centro.vms.ultimo.siguiente = None
                 else:
-                    actual.anterior.siguiente = actual.siguiente
-                    actual.siguiente.anterior = actual.anterior
-                return
+                    anterior.siguiente = actual.siguiente
+
+                return  # Eliminación exitosa
+
+            anterior = actual
             actual = actual.siguiente

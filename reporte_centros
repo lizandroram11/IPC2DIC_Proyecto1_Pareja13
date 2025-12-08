@@ -1,0 +1,51 @@
+digraph CentrosDatos {
+	bgcolor=white rankdir=LR
+	DC001 [label="
+            Guatemala Norte
+            ID: DC001
+            CPU: 0/200
+            RAM: 0/512
+            ALM: 0/3000
+            " fillcolor=lightblue shape=box style=filled]
+	DC002 [label="
+            Guatemala Este
+            ID: DC002
+            CPU: 0/150
+            RAM: 0/256
+            ALM: 0/1500
+            " fillcolor=lightblue shape=box style=filled]
+	DC003 [label="
+            Guatemala Sur
+            ID: DC003
+            CPU: 0/300
+            RAM: 0/1024
+            ALM: 0/5000
+            " fillcolor=lightblue shape=box style=filled]
+	DC004 [label="
+            Guatemala Oeste
+            ID: DC004
+            CPU: 0/100
+            RAM: 0/128
+            ALM: 0/1000
+            " fillcolor=lightblue shape=box style=filled]
+	DC005 [label="
+            Antigua
+            ID: DC005
+            CPU: 0/250
+            RAM: 0/768
+            ALM: 0/3500
+            " fillcolor=lightblue shape=box style=filled]
+	DC006 [label="
+            Petén
+            ID: DC006
+            CPU: 0/400
+            RAM: 0/2048
+            ALM: 0/8000
+            " fillcolor=lightblue shape=box style=filled]
+	DC001 -> DC002
+	DC002 -> DC003
+	DC003 -> DC004
+	DC004 -> DC005
+	DC005 -> DC006
+	DC006 -> DC001
+}

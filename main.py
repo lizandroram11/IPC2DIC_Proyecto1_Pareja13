@@ -1,18 +1,16 @@
-# main.py
-
 from core.gestores.gestor_centros import GestorCentros
 from core.gestores.gestor_vms import GestorVMs
 from core.gestores.gestor_contenedores import GestorContenedores
 from core.gestores.gestor_solicitudes import GestorSolicitudes
-
+from core.report.generador_xml import GeneradorXML
 from core.xml.lector_xml import LectorXML
+from core.report.gestor_reportes import GestorReportes
 
 
 class CloudSyncApp:
     def __init__(self):
-        # ============================
+
         # Inicializar gestores
-        # ============================
         self.centros = GestorCentros()
         self.vms = GestorVMs(self.centros)
         self.contenedores = GestorContenedores(self.vms)
@@ -21,9 +19,7 @@ class CloudSyncApp:
         # Conectar gestores entre sí
         self.solicitudes.conectar_gestores(self.centros, self.vms)
 
-        # ============================
-        # Lector XML
-        # ============================
+        #Lector XML
         self.lector = LectorXML(
             self.centros,
             self.vms,
@@ -31,9 +27,15 @@ class CloudSyncApp:
             self.solicitudes
         )
 
-    # ============================================================
-    # MENÚ PRINCIPAL
-    # ============================================================
+       #Gestor de Reportes
+        self.reportes = GestorReportes(
+            self.centros,
+            self.vms,
+            self.contenedores,
+            self.solicitudes
+        )
+
+    #Menu Principal
     def iniciar(self):
         while True:
             print("\n=== CLOUDSYNC MANAGER - SISTEMA DE NUBE ===")
@@ -44,7 +46,7 @@ class CloudSyncApp:
             print("5. Gestión de Solicitudes")
             print("6. Reportes Graphviz")
             print("7. Generar XML de Salida")
-            print("8. Historial de Operaciones")
+            print("8. Historial de Operaciones (pendiente)")
             print("9. Salir")
 
             opcion = input("Selecciona una opción: ")
@@ -64,6 +66,15 @@ class CloudSyncApp:
             elif opcion == "5":
                 self.menu_solicitudes()
 
+            elif opcion == "6":
+                self.menu_reportes()
+                
+            elif opcion == "7":
+                gen = GeneradorXML(self.centros, self.vms, self.contenedores, self.solicitudes)
+                gen.generar_xml()
+
+
+
             elif opcion == "9":
                 print("Saliendo del sistema...")
                 break
@@ -71,18 +82,13 @@ class CloudSyncApp:
             else:
                 print("Opción inválida")
 
-    # ============================================================
-    # OPCIÓN 1: CARGAR XML
-    # ============================================================
+   #Cargar XML
     def menu_cargar_xml(self):
         print("\n=== CARGAR ARCHIVO XML ===")
         ruta = input("Ingresa la ruta del archivo XML: ")
-
         self.lector.cargar_archivo(ruta)
 
-    # ============================================================
-    # OPCIÓN 2: CENTROS DE DATOS
-    # ============================================================
+   #Centro de Datos
     def menu_centros(self):
         print("\n=== GESTIÓN DE CENTROS DE DATOS ===")
         print("1. Listar todos los centros")
@@ -146,9 +152,7 @@ class CloudSyncApp:
         print(f"RAM libre: {centro.ram_total - centro.ram_usado}")
         print(f"Almacenamiento libre: {centro.alm_total - centro.alm_usado}")
 
-    # ============================================================
-    # OPCIÓN 3: VMs
-    # ============================================================
+    #VMs
     def menu_vms(self):
         print("\n=== GESTIÓN DE MÁQUINAS VIRTUALES ===")
         print("1. Buscar VM por ID")
@@ -170,7 +174,6 @@ class CloudSyncApp:
     def buscar_vm(self):
         id_vm = input("ID de la VM: ")
 
-        # Buscar en todos los centros
         actual = self.centros.centros.primero
         if actual is None:
             print("No hay centros registrados")
@@ -225,24 +228,43 @@ class CloudSyncApp:
         else:
             print("No se pudo migrar la VM")
 
-    # ============================================================
-    # OPCIÓN 4: CONTENEDORES
-    # ============================================================
+   #Contenedores
     def menu_contenedores(self):
         print("\n=== GESTIÓN DE CONTENEDORES ===")
         print("Esta sección se implementará más adelante.")
 
-    # ============================================================
-    # OPCIÓN 5: SOLICITUDES
-    # ============================================================
+    #Solicitudes
     def menu_solicitudes(self):
         print("\n=== GESTIÓN DE SOLICITUDES ===")
         print("Esta sección se implementará más adelante.")
 
+    #Reportes Graphviz
+    def menu_reportes(self):
+        print("\n=== REPORTES GRAPHVIZ ===")
+        print("1. Reporte de Centros de Datos")
+        print("2. Reporte de VMs por Centro")
+        print("3. Reporte de Contenedores por VM")
+        print("4. Reporte de Solicitudes")
+        print("5. Volver")
 
-# ============================================================
-# EJECUCIÓN DEL PROGRAMA
-# ============================================================
+        opcion = input("Selecciona una opción: ")
+
+        if opcion == "1":
+            self.reportes.reporte_centros()
+
+        elif opcion == "2":
+            self.reportes.reporte_vms_por_centro()
+
+        elif opcion == "3":
+            self.reportes.reporte_contenedores_por_vm()
+
+        elif opcion == "4":
+            self.reportes.reporte_solicitudes()
+
+
+    
+
+#Ejecicion del programa
 if __name__ == "__main__":
     app = CloudSyncApp()
     app.iniciar()

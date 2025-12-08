@@ -1,3 +1,4 @@
+#Contenedor dentro de la VM
 class Contenedor:
     def __init__(self, id, nombre, imagen, cpu, ram, puerto):
         self.id = id

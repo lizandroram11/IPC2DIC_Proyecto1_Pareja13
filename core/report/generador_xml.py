@@ -126,9 +126,7 @@ class GeneradorXML:
 
             nodo_cont = nodo_cont.siguiente
 
-    # --------------------------------------------------------
-    # SECCIÓN: SOLICITUDES
-    # --------------------------------------------------------
+    #Seccion de Solicitudes
     def _xml_solicitudes(self, root):
         tag_solicitudes = ET.SubElement(root, "Solicitudes")
 

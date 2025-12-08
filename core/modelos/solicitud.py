@@ -1,3 +1,4 @@
+#Modelo para gestionar las solicitudes
 class Solicitud:
     def __init__(self, id, cliente, tipo, prioridad, cpu, ram, almacenamiento, tiempo):
         self.id = id

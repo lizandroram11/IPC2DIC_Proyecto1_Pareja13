@@ -7,12 +7,17 @@ class CentroDatos:
         self.pais = pais
         self.ciudad = ciudad
 
+# Recursos totales del centro
         self.cpu_total = cpu
         self.ram_total = ram
         self.alm_total = almacenamiento
 
+ # Recursos usados (se actualizan al agregar VMs)
         self.cpu_usado = 0
         self.ram_usado = 0
         self.alm_usado = 0
 
+# Lista de VMs dentro del centro
         self.vms = ListaDoble()
+
+

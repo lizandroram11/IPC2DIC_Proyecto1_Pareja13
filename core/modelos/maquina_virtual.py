@@ -8,7 +8,9 @@ class MaquinaVirtual:
         self.ram = ram
         self.almacenamiento = almacenamiento
         self.ip = ip
-        self.centro = centro
+        self.centro = centro  # ID del centro al que pertenece
         self.estado = "Activa"
 
+# Lista de contenedores dentro de la VM
         self.contenedores = ListaSimple()
+
