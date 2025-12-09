@@ -116,8 +116,6 @@ class GestorReportes:
         print(" Reporte generado: reporte_vms_por_centro.png")
 
 
-
-
     # REPORTE: CONTENEDORES POR VM
     def reporte_contenedores_por_vm(self):
         

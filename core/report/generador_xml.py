@@ -10,10 +10,6 @@ class GeneradorXML:
     
     # MÉTODO PRINCIPAL
     def generar_xml(self, ruta_salida="salida.xml"):
-        """
-        Genera un archivo XML con el estado actual del sistema.
-        """
-
         root = ET.Element("CloudSync")
 
         self._xml_centros(root)
@@ -61,9 +57,7 @@ class GeneradorXML:
             if actual == self.centros.centros.primero:
                 break
 
-    # --------------------------------------------------------
     # SECCIÓN: MÁQUINAS VIRTUALES
-    # --------------------------------------------------------
     def _xml_vms(self, root):
         tag_vms = ET.SubElement(root, "MaquinasVirtuales")
 
@@ -101,9 +95,8 @@ class GeneradorXML:
             if actual_centro == self.centros.centros.primero:
                 break
 
-    # --------------------------------------------------------
+
     # SECCIÓN: CONTENEDORES
-    # --------------------------------------------------------
     def _xml_contenedores(self, nodo_vm_xml, vm):
         tag_conts = ET.SubElement(nodo_vm_xml, "Contenedores")
 

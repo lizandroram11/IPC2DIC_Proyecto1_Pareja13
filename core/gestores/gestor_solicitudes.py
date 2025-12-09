@@ -13,20 +13,12 @@ class GestorSolicitudes:
 
     # Conectar gestores externos
     def conectar_gestores(self, centros, vms):
-        """
-        Conecta el gestor de centros y el gestor de VMs.
-        Esto permite que las solicitudes puedan crear VMs
-        y asignarlas a centros.
-        """
         self.gestor_centros = centros
         self.gestor_vms = vms
 
    
     # Agregar solicitud a la cola
     def agregar(self, solicitud):
-        """
-        Inserta una solicitud en la cola de prioridad.
-        """
         self.cola.insertar(solicitud)
 
     

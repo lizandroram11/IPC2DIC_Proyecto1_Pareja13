@@ -7,18 +7,10 @@ class GestorCentros:
 
     #Agregar centro a lista circular
     def agregar_centro(self, centro):
-        """
-        Inserta un centro de datos en la lista circular.
-        El lector XML llama a este método por cada <centro>.
-        """
         self.centros.insertar(centro)
 
     #Buscar centro por ID
     def buscar(self, id):
-        """
-        Retorna el centro cuyo ID coincida con el parámetro.
-        Si no existe, retorna None.
-        """
         return self.centros.buscar(id)
 
    #Centro con mas recursos disponibles

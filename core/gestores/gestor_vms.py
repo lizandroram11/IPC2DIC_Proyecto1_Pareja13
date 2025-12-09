@@ -8,10 +8,6 @@ class GestorVMs:
     
     # Agregar VM desde el lector XML
     def agregar_vm(self, vm, id_centro):
-        """
-        Inserta una VM en el centro correspondiente.
-        Este método se usa al cargar el archivo XML.
-        """
         centro = self.centros.buscar(id_centro)
         if centro:
             centro.vms.insertar(vm)
@@ -43,13 +39,7 @@ class GestorVMs:
     # Migrar VM entre centros
 
     def migrar_vm(self, vm_id, origen_id, destino_id):
-        """
-        Migra una VM de un centro a otro.
-        Verifica:
-            - Que ambos centros existan
-            - Que la VM exista en el centro origen
-            - Que el centro destino tenga recursos suficientes
-        """
+
         centro_origen = self.centros.buscar(origen_id)
         centro_destino = self.centros.buscar(destino_id)
 
@@ -97,11 +87,6 @@ class GestorVMs:
    
     # Eliminar VM de un centro (ListaSimple)
     def _eliminar_vm_de_centro(self, centro, vm_id):
-        """
-        Elimina una VM de la lista simple de un centro.
-        IMPORTANTE:
-            La lista de VMs es ListaSimple, NO tiene anterior ni ultimo.
-        """
         actual = centro.vms.primero
         anterior = None
 

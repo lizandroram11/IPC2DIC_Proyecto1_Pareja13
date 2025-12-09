@@ -3,9 +3,7 @@ class ListaSimple:
     def __init__(self):
         self.primero = None
 
-    # --------------------------------------------------------
     # Insertar al final
-    # --------------------------------------------------------
     def insertar(self, valor):
         nuevo = NodoSimple(valor)
 

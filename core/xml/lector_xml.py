@@ -24,10 +24,7 @@ class LectorXML:
 
     # MÉTODO PRINCIPAL: CARGAR ARCHIVO XML
     def cargar_archivo(self, ruta):
-        """
-        Carga el archivo XML desde la ruta indicada.
-        Llama a los métodos internos para cargar cada sección.
-        """
+
         try:
             tree = ET.parse(ruta)
             root = tree.getroot()
@@ -92,9 +89,6 @@ class LectorXML:
     
     # CARGA DE CONTENEDORES
     def _cargar_contenedores(self, nodo_vm, vm):
-        """
-        Lee los <contenedor> dentro de una VM y los inserta en su lista.
-        """
         for nodo in nodo_vm.findall("./contenedores/contenedor"):
             id = nodo.get("id")
 
