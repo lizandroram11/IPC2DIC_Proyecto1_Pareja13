@@ -7,23 +7,51 @@ class GeneradorXML:
         self.contenedores = gestor_contenedores
         self.solicitudes = gestor_solicitudes
 
-    
+    # ============================================================
     # MÉTODO PRINCIPAL
-    def generar_xml(self, ruta_salida="salida.xml"):
+    # ============================================================
+    '''def generar_xml(self, ruta_salida="salida.xml"):
+        #Genera un archivo XML con el estado actual del sistema.
+
         root = ET.Element("CloudSync")
 
         self._xml_centros(root)
         self._xml_vms(root)
         self._xml_solicitudes(root)
 
-        # Crear árbol y guardar archivo
         tree = ET.ElementTree(root)
         tree.write(ruta_salida, encoding="utf-8", xml_declaration=True)
 
         print(f"XML generado correctamente en: {ruta_salida}")
+'''
 
-   
+    def generar_xml(self, ruta_salida="salida.xml"):
+        """
+        Genera un archivo XML con formato bonito (pretty print).
+        """
+        root = ET.Element("CloudSync")
+
+        self._xml_centros(root)
+        self._xml_vms(root)
+        self._xml_solicitudes(root)
+
+        # Convertir a string
+        xml_str = ET.tostring(root, encoding="utf-8")
+
+        # Pretty print con minidom
+        import xml.dom.minidom as minidom
+        dom = minidom.parseString(xml_str)
+        pretty_xml = dom.toprettyxml(indent="    ")
+
+        # Guardar archivo
+        with open(ruta_salida, "w", encoding="utf-8") as f:
+            f.write(pretty_xml)
+
+        print(f"XML generado correctamente en: {ruta_salida}")
+
+    # ============================================================
     # SECCIÓN: CENTROS DE DATOS
+    # ============================================================
     def _xml_centros(self, root):
         tag_centros = ET.SubElement(root, "CentrosDatos")
 
@@ -57,7 +85,9 @@ class GeneradorXML:
             if actual == self.centros.centros.primero:
                 break
 
+    # ============================================================
     # SECCIÓN: MÁQUINAS VIRTUALES
+    # ============================================================
     def _xml_vms(self, root):
         tag_vms = ET.SubElement(root, "MaquinasVirtuales")
 
@@ -82,7 +112,7 @@ class GeneradorXML:
                 recursos = ET.SubElement(nodo_vm_xml, "Recursos")
                 ET.SubElement(recursos, "CPU").text = str(vm.cpu)
                 ET.SubElement(recursos, "RAM").text = str(vm.ram)
-                ET.SubElement(recursos, "Almacenamiento").text = str(vm.alm)
+                ET.SubElement(recursos, "Almacenamiento").text = str(vm.almacenamiento)
 
                 ET.SubElement(nodo_vm_xml, "IP").text = vm.ip
 
@@ -95,8 +125,9 @@ class GeneradorXML:
             if actual_centro == self.centros.centros.primero:
                 break
 
-
+    # ============================================================
     # SECCIÓN: CONTENEDORES
+    # ============================================================
     def _xml_contenedores(self, nodo_vm_xml, vm):
         tag_conts = ET.SubElement(nodo_vm_xml, "Contenedores")
 
@@ -119,7 +150,9 @@ class GeneradorXML:
 
             nodo_cont = nodo_cont.siguiente
 
-    #Seccion de Solicitudes
+    # ============================================================
+    # SECCIÓN: SOLICITUDES
+    # ============================================================
     def _xml_solicitudes(self, root):
         tag_solicitudes = ET.SubElement(root, "Solicitudes")
 
@@ -141,7 +174,7 @@ class GeneradorXML:
             recursos = ET.SubElement(nodo_sol, "Recursos")
             ET.SubElement(recursos, "CPU").text = str(sol.cpu)
             ET.SubElement(recursos, "RAM").text = str(sol.ram)
-            ET.SubElement(recursos, "Almacenamiento").text = str(sol.alm)
+            ET.SubElement(recursos, "Almacenamiento").text = str(sol.almacenamiento)
 
             ET.SubElement(nodo_sol, "TiempoEstimado").text = str(sol.tiempo)
 
