@@ -73,7 +73,6 @@ class CloudSyncApp:
                 gen = GeneradorXML(self.centros, self.vms, self.contenedores, self.solicitudes)
                 nombre = input("Ingrese el nombre del archivo XML de salida (sin extensión): ")
                 gen.generar_xml(nombre + ".xml")
-                #gen.generar_xml()
 
 
 

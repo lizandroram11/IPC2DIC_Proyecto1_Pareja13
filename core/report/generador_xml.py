@@ -7,28 +7,10 @@ class GeneradorXML:
         self.contenedores = gestor_contenedores
         self.solicitudes = gestor_solicitudes
 
-    # ============================================================
-    # MÉTODO PRINCIPAL
-    # ============================================================
-    '''def generar_xml(self, ruta_salida="salida.xml"):
-        #Genera un archivo XML con el estado actual del sistema.
-
-        root = ET.Element("CloudSync")
-
-        self._xml_centros(root)
-        self._xml_vms(root)
-        self._xml_solicitudes(root)
-
-        tree = ET.ElementTree(root)
-        tree.write(ruta_salida, encoding="utf-8", xml_declaration=True)
-
-        print(f"XML generado correctamente en: {ruta_salida}")
-'''
-
+    # MÉTODO PRINCIPAL: Genera el archivo.xml, desde el menu principal se ingresa el nombre del archivo
     def generar_xml(self, ruta_salida="salida.xml"):
-        """
-        Genera un archivo XML con formato bonito (pretty print).
-        """
+        
+        #estructura del archivo.xml para que la estructura sea razonable, uso de Pretty
         root = ET.Element("CloudSync")
 
         self._xml_centros(root)
@@ -49,9 +31,7 @@ class GeneradorXML:
 
         print(f"XML generado correctamente en: {ruta_salida}")
 
-    # ============================================================
-    # SECCIÓN: CENTROS DE DATOS
-    # ============================================================
+    # SECCIÓN: GESTOR DE CENTROS DE DATOS
     def _xml_centros(self, root):
         tag_centros = ET.SubElement(root, "CentrosDatos")
 
@@ -85,9 +65,9 @@ class GeneradorXML:
             if actual == self.centros.centros.primero:
                 break
 
-    # ============================================================
+
     # SECCIÓN: MÁQUINAS VIRTUALES
-    # ============================================================
+
     def _xml_vms(self, root):
         tag_vms = ET.SubElement(root, "MaquinasVirtuales")
 
@@ -125,9 +105,8 @@ class GeneradorXML:
             if actual_centro == self.centros.centros.primero:
                 break
 
-    # ============================================================
+
     # SECCIÓN: CONTENEDORES
-    # ============================================================
     def _xml_contenedores(self, nodo_vm_xml, vm):
         tag_conts = ET.SubElement(nodo_vm_xml, "Contenedores")
 
@@ -150,9 +129,9 @@ class GeneradorXML:
 
             nodo_cont = nodo_cont.siguiente
 
-    # ============================================================
+   
     # SECCIÓN: SOLICITUDES
-    # ============================================================
+    
     def _xml_solicitudes(self, root):
         tag_solicitudes = ET.SubElement(root, "Solicitudes")
 
