@@ -5,6 +5,7 @@ from core.gestores.gestor_solicitudes import GestorSolicitudes
 from core.report.generador_xml import GeneradorXML
 from core.xml.lector_xml import LectorXML
 from core.report.gestor_reportes import GestorReportes
+from core.estructuras.pila import Pila
 
 
 class CloudSyncApp:
@@ -34,6 +35,8 @@ class CloudSyncApp:
             self.contenedores,
             self.solicitudes
         )
+    # Historial de operaciones (Pila)
+        self.historial = Pila()
 
     #Menu Principal
     def iniciar(self):
@@ -71,10 +74,10 @@ class CloudSyncApp:
                 
             elif opcion == "7":
                 gen = GeneradorXML(self.centros, self.vms, self.contenedores, self.solicitudes)
-                nombre = input("Ingrese el nombre del archivo XML de salida (sin extensión): ")
-                gen.generar_xml(nombre + ".xml")
+                gen.generar_xml()
 
-
+            elif opcion == "8":
+                self.menu_historial()
 
             elif opcion == "9":
                 print("Saliendo del sistema...")
@@ -88,9 +91,6 @@ class CloudSyncApp:
         print("\n=== CARGAR ARCHIVO XML ===")
         ruta = input("Ingresa la ruta del archivo XML: ")
         self.lector.cargar_archivo(ruta)
-
-        id_centro = input("Ingresa el ID del centro de datos: ")
-        self.lector.mostrar_centro(id_centro)
 
 
    #Centro de Datos
@@ -230,6 +230,7 @@ class CloudSyncApp:
 
         if self.vms.migrar_vm(vm_id, origen, destino):
             print("VM migrada exitosamente")
+            self.historial.push(f"Migración: VM {vm_id} de {origen} a {destino}")
         else:
             print("No se pudo migrar la VM")
 
@@ -248,6 +249,7 @@ class CloudSyncApp:
                 vm = input("ID de la VM: ")
                 nombre = input("Nombre del contenedor: ")
                 self.contenedores.agregar_contenedor(vm, nombre)
+                self.historial.push(f"Contenedor {nombre} creado en VM {vm}")
                 input("Presiona Enter para continuar...")
 
             elif sub == "2":
@@ -259,6 +261,7 @@ class CloudSyncApp:
                 vm = input("ID de la VM: ")
                 nombre = input("Nombre del contenedor: ")
                 self.contenedores.eliminar_contenedor(vm, nombre)
+                self.historial.push(f"Contenedor {nombre} eliminado de VM {vm}")
                 input("Presiona Enter para continuar...")
 
             elif sub == "4":
@@ -269,8 +272,46 @@ class CloudSyncApp:
 
     #Solicitudes
     def menu_solicitudes(self):
-        print("\n=== GESTIÓN DE SOLICITUDES ===")
-        print("Esta sección se implementará más adelante.")
+        while True:
+            print("\n=== GESTIÓN DE SOLICITUDES ===")
+            print("1. Agregar nueva solicitud")
+            print("2. Listar solicitudes en cola")
+            print("3. Procesar N solicitudes")
+            print("4. Volver")
+
+            opcion = input("Selecciona una opción: ")
+
+            if opcion == "1":
+                id = input("ID de la solicitud: ")
+                cliente = input("Cliente: ")
+                tipo = input("Tipo (deploy/backup): ")
+                prioridad = int(input("Prioridad (1-5): "))
+                cpu = int(input("CPU requerida: "))
+                ram = int(input("RAM requerida: "))
+                alm = int(input("Almacenamiento requerido: "))
+                tiempo = int(input("Tiempo estimado: "))
+
+                solicitud = Solicitud(id, cliente, tipo, prioridad, cpu, ram, alm, tiempo)
+                self.solicitudes.agregar(solicitud)
+                self.historial.push(f"Solicitud {id} agregada (cliente: {cliente}, tipo: {tipo})")
+                print("✓ Solicitud agregada exitosamente")
+
+            elif opcion == "2":
+                self.solicitudes.listar()
+                input("Presiona Enter para continuar...")
+
+            elif opcion == "3":
+                cantidad = int(input("¿Cuántas solicitudes deseas procesar?: "))
+                procesadas, completadas, fallidas = self.solicitudes.procesar_n(cantidad)
+                self.historial.push(f"Procesadas {procesadas}, completadas {completadas}, fallidas {fallidas}")
+                print(f"✓ Procesadas: {procesadas}, Completadas: {completadas}, Fallidas: {fallidas}")
+                input("Presiona Enter para continuar...")
+
+            elif opcion == "4":
+                break
+            else:
+                print("Opción inválida")
+
 
     #Reportes Graphviz
     def menu_reportes(self):
