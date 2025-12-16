@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cloudSync>
+<configuracion>
+<centrosDatos>
+<centro id="DC001" nombre="DataCenter Norte">
+<ubicacion>
+<pais>Guatemala</pais>
+<ciudad>Guatemala City</ciudad>
+</ubicacion>
+<capacidad>
+<cpu>128</cpu>
+<ram>512</ram>
+<almacenamiento>1000</almacenamiento>
+</capacidad>
+</centro>
+<centro id="DC002" nombre="DataCenter Sur">
+<ubicacion>
+<pais>Guatemala</pais>
+<ciudad>Escuintla</ciudad>
+</ubicacion>
+<capacidad>
+<cpu>256</cpu>
+<ram>1024</ram>
+<almacenamiento>2000</almacenamiento>
+</capacidad>
+</centro>
+<centro id="DC003" nombre="DataCenter Occidente">
+<ubicacion>
+<pais>Guatemala</pais>
+<ciudad>Quetzaltenango</ciudad>
+</ubicacion>
+<capacidad>
+<cpu>192</cpu>
+<ram>768</ram>
+<almacenamiento>1500</almacenamiento>
+</capacidad>
+</centro>
+<centro id="DC004" nombre="DataCenter Oriente">
+<ubicacion>
+<pais>Guatemala</pais>
+<ciudad>Zacapa</ciudad>
+</ubicacion>
+<capacidad>
+<cpu>96</cpu>
+<ram>384</ram>
+<almacenamiento>800</almacenamiento>
+</capacidad>
+</centro>
+<centro id="DC005" nombre="DataCenter Central">
+<ubicacion>
+<pais>Guatemala</pais>
+<ciudad>Antigua Guatemala</ciudad>
+</ubicacion>
+<capacidad>
+<cpu>320</cpu>
+<ram>1536</ram>
+<almacenamiento>3000</almacenamiento>
+</capacidad>
+</centro>
+</centrosDatos>
+<maquinasVirtuales>
+<vm id="VM001" centroAsignado="DC001">
+<sistemaOperativo>Ubuntu 22.04 LTS</sistemaOperativo>
+<recursos>
+<cpu>8</cpu>
+<ram>16</ram>
+<almacenamiento>100</almacenamiento>
+</recursos>
+<ip>192.168.1.10</ip>
+<contenedores>
+<contenedor id="CNT001">
+<nombre>WebServer</nombre>
+<imagen>nginx:latest</imagen>
+<recursos>
+<cpu>25</cpu>
+<ram>512</ram>
+</recursos>
+<puerto>8080</puerto>
+</contenedor>
+<contenedor id="CNT002">
+<nombre>Database</nombre>
+<imagen>mysql:8.0</imagen>
+<recursos>
+<cpu>40</cpu>
+<ram>1024</ram>
+</recursos>
+<puerto>3306</puerto>
+</contenedor>
+</contenedores>
+</vm>
+<!-- File truncated for brevity in generation environment -->
+</maquinasVirtuales>
+</configuracion>
+</cloudSync>

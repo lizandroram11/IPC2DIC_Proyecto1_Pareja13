@@ -24,7 +24,6 @@ class LectorXML:
 
     # MÉTODO PRINCIPAL: CARGAR ARCHIVO XML
     def cargar_archivo(self, ruta):
-
         try:
             tree = ET.parse(ruta)
             root = tree.getroot()
@@ -42,10 +41,10 @@ class LectorXML:
         except Exception as e:
             print(f"Error al cargar el archivo XML: {e}")
 
-   
+    # ============================
     # CARGA DE CENTROS DE DATOS
+    # ============================
     def _cargar_centros(self, root):
-
         for nodo in root.findall("./configuracion/centrosDatos/centro"):
             id = nodo.get("id")
             nombre = nodo.get("nombre")
@@ -62,10 +61,10 @@ class LectorXML:
 
             print(f"Centro {id} cargado")
 
-    
+    # ============================
     # CARGA DE MÁQUINAS VIRTUALES
+    # ============================
     def _cargar_vms(self, root):
-
         for nodo in root.findall("./configuracion/maquinasVirtuales/vm"):
             id = nodo.get("id")
             centro_asignado = nodo.get("centroAsignado")
@@ -86,8 +85,9 @@ class LectorXML:
             # Cargar contenedores dentro de esta VM
             self._cargar_contenedores(nodo, vm)
 
-    
+    # ============================
     # CARGA DE CONTENEDORES
+    # ============================
     def _cargar_contenedores(self, nodo_vm, vm):
         for nodo in nodo_vm.findall("./contenedores/contenedor"):
             id = nodo.get("id")
@@ -104,10 +104,10 @@ class LectorXML:
 
             print(f"   Contenedor {id} agregado a VM {vm.id}")
 
-    
+    # ============================
     # CARGA DE SOLICITUDES
+    # ============================
     def _cargar_solicitudes(self, root):
-
         for nodo in root.findall("./configuracion/solicitudes/solicitud"):
             id = nodo.get("id")
 
@@ -121,12 +121,20 @@ class LectorXML:
 
             tiempo = int(safe_text(nodo, "tiempoEstimado", "tiempoEstimado", id))
 
+            # Normalizamos tipo a lo que espera GestorSolicitudes
+            if tipo.lower() == "deploy":
+                tipo = "Deploy"
+            elif tipo.lower() == "backup":
+                tipo = "Backup"
+
             solicitud = Solicitud(id, cliente, tipo, prioridad, cpu, ram, alm, tiempo)
             self.solicitudes.agregar(solicitud)
 
             print(f"Solicitud {id} cargada")
 
-    #Ejecucion de instrucciones
+    # ============================
+    # EJECUCIÓN DE INSTRUCCIONES
+    # ============================
     def _ejecutar_instrucciones(self, root):
         print("\n=== Ejecutando Instrucciones ===")
 
@@ -142,8 +150,7 @@ class LectorXML:
             elif tipo == "procesarSolicitudes":
                 self._instruccion_procesar_solicitudes(nodo)
 
-   
-    # INSTRUCCIÓN: CREAR VM 
+    # INSTRUCCIÓN: CREAR VM
     def _instruccion_crear_vm(self, nodo):
         id_vm = safe_text(nodo, "id", "id", "crearVM")
         centro = safe_text(nodo, "centro", "centro", id_vm)
@@ -162,7 +169,7 @@ class LectorXML:
         else:
             print("No se pudo crear la VM (recursos insuficientes)")
 
-   #Migrar VM
+    # INSTRUCCIÓN: MIGRAR VM
     def _instruccion_migrar_vm(self, nodo):
         vm_id = safe_text(nodo, "vmId", "vmId", "migrarVM")
         origen = safe_text(nodo, "centroOrigen", "centroOrigen", vm_id)
@@ -175,7 +182,7 @@ class LectorXML:
         else:
             print("No se pudo migrar la VM")
 
-    #Procesar solicitudes
+    # INSTRUCCIÓN: PROCESAR SOLICITUDES
     def _instruccion_procesar_solicitudes(self, nodo):
         cantidad = int(safe_text(nodo, "cantidad", "cantidad", "procesarSolicitudes"))
 

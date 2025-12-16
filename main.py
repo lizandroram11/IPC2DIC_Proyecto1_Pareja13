@@ -6,6 +6,7 @@ from core.report.generador_xml import GeneradorXML
 from core.xml.lector_xml import LectorXML
 from core.report.gestor_reportes import GestorReportes
 from core.estructuras.pila import Pila
+from core.modelos.solicitud import Solicitud  # <-- IMPORTANTE
 
 
 class CloudSyncApp:
@@ -20,7 +21,7 @@ class CloudSyncApp:
         # Conectar gestores entre sí
         self.solicitudes.conectar_gestores(self.centros, self.vms)
 
-        #Lector XML
+        # Lector XML
         self.lector = LectorXML(
             self.centros,
             self.vms,
@@ -28,17 +29,20 @@ class CloudSyncApp:
             self.solicitudes
         )
 
-       #Gestor de Reportes
+        # Gestor de Reportes
         self.reportes = GestorReportes(
             self.centros,
             self.vms,
             self.contenedores,
             self.solicitudes
         )
-    # Historial de operaciones (Pila)
+
+        # Historial de operaciones (Pila)
         self.historial = Pila()
 
-    #Menu Principal
+    # ============================
+    # MENÚ PRINCIPAL
+    # ============================
     def iniciar(self):
         while True:
             print("\n=== CLOUDSYNC MANAGER - SISTEMA DE NUBE ===")
@@ -49,7 +53,7 @@ class CloudSyncApp:
             print("5. Gestión de Solicitudes")
             print("6. Reportes Graphviz")
             print("7. Generar XML de Salida")
-            print("8. Historial de Operaciones (pendiente)")
+            print("8. Historial de Operaciones")
             print("9. Salir")
 
             opcion = input("Selecciona una opción: ")
@@ -71,10 +75,14 @@ class CloudSyncApp:
 
             elif opcion == "6":
                 self.menu_reportes()
-                
+
             elif opcion == "7":
+                # Pedir nombre del archivo al usuario
+                nombre = input("Ingrese el nombre del archivo XML de salida (sin extensión): ").strip()
+                if not nombre:
+                    nombre = "salida"
                 gen = GeneradorXML(self.centros, self.vms, self.contenedores, self.solicitudes)
-                gen.generar_xml()
+                gen.generar_xml(nombre + ".xml")
 
             elif opcion == "8":
                 self.menu_historial()
@@ -86,14 +94,17 @@ class CloudSyncApp:
             else:
                 print("Opción inválida")
 
-   #Cargar XML
+    # ============================
+    # CARGAR XML
+    # ============================
     def menu_cargar_xml(self):
         print("\n=== CARGAR ARCHIVO XML ===")
         ruta = input("Ingresa la ruta del archivo XML: ")
         self.lector.cargar_archivo(ruta)
 
-
-   #Centro de Datos
+    # ============================
+    # CENTROS DE DATOS
+    # ============================
     def menu_centros(self):
         print("\n=== GESTIÓN DE CENTROS DE DATOS ===")
         print("1. Listar todos los centros")
@@ -157,7 +168,9 @@ class CloudSyncApp:
         print(f"RAM libre: {centro.ram_total - centro.ram_usado}")
         print(f"Almacenamiento libre: {centro.alm_total - centro.alm_usado}")
 
-    #VMs
+    # ============================
+    # MÁQUINAS VIRTUALES
+    # ============================
     def menu_vms(self):
         print("\n=== GESTIÓN DE MÁQUINAS VIRTUALES ===")
         print("1. Buscar VM por ID")
@@ -234,34 +247,48 @@ class CloudSyncApp:
         else:
             print("No se pudo migrar la VM")
 
-   #Contenedores
+    # ============================
+    # CONTENEDORES
+    # ============================
     def menu_contenedores(self):
         while True:
             print("\n=== GESTIÓN DE CONTENEDORES ===")
             print("1. Crear contenedor")
-            print("2. Listar contenedores")
+            print("2. Listar contenedores de una VM")
             print("3. Eliminar contenedor")
             print("4. Volver")
 
             sub = input("Selecciona una opción: ")
 
             if sub == "1":
-                vm = input("ID de la VM: ")
+                from core.modelos.contenedor import Contenedor
+                vm_id = input("ID de la VM: ")
+                id_cont = input("ID del contenedor: ")
                 nombre = input("Nombre del contenedor: ")
-                self.contenedores.agregar_contenedor(vm, nombre)
-                self.historial.push(f"Contenedor {nombre} creado en VM {vm}")
+                imagen = input("Imagen (ej: python:3.10): ")
+                cpu = int(input("CPU del contenedor: "))
+                ram = int(input("RAM del contenedor: "))
+                puerto = int(input("Puerto: "))
+
+                cont = Contenedor(id_cont, nombre, imagen, cpu, ram, puerto)
+                ok = self.contenedores.agregar_contenedor(cont, vm_id)
+                if ok:
+                    print(f"Contenedor {id_cont} creado en VM {vm_id}")
+                    self.historial.push(f"Contenedor {id_cont} creado en VM {vm_id}")
+                else:
+                    print("No se pudo crear el contenedor (VM no encontrada)")
                 input("Presiona Enter para continuar...")
 
             elif sub == "2":
-                vm = input("ID de la VM: ")
-                self.contenedores.listar_contenedores(vm)
+                vm_id = input("ID de la VM: ")
+                self.contenedores.listar_contenedores(vm_id)
                 input("Presiona Enter para continuar...")
 
             elif sub == "3":
-                vm = input("ID de la VM: ")
-                nombre = input("Nombre del contenedor: ")
-                self.contenedores.eliminar_contenedor(vm, nombre)
-                self.historial.push(f"Contenedor {nombre} eliminado de VM {vm}")
+                vm_id = input("ID de la VM: ")
+                id_cont = input("ID del contenedor a eliminar: ")
+                self.contenedores.eliminar_contenedor(vm_id, id_cont)
+                self.historial.push(f"Contenedor {id_cont} eliminado de VM {vm_id}")
                 input("Presiona Enter para continuar...")
 
             elif sub == "4":
@@ -270,7 +297,9 @@ class CloudSyncApp:
                 print("Opción inválida")
                 input("Presiona Enter para continuar...")
 
-    #Solicitudes
+    # ============================
+    # SOLICITUDES
+    # ============================
     def menu_solicitudes(self):
         while True:
             print("\n=== GESTIÓN DE SOLICITUDES ===")
@@ -284,7 +313,17 @@ class CloudSyncApp:
             if opcion == "1":
                 id = input("ID de la solicitud: ")
                 cliente = input("Cliente: ")
-                tipo = input("Tipo (deploy/backup): ")
+                tipo = input("Tipo (deploy/backup): ").strip().lower()
+
+                # Normalizar a lo que espera GestorSolicitudes: "Deploy" / "Backup"
+                if tipo == "deploy":
+                    tipo = "Deploy"
+                elif tipo == "backup":
+                    tipo = "Backup"
+                else:
+                    print("Tipo no válido, usando 'Deploy' por defecto")
+                    tipo = "Deploy"
+
                 prioridad = int(input("Prioridad (1-5): "))
                 cpu = int(input("CPU requerida: "))
                 ram = int(input("RAM requerida: "))
@@ -312,8 +351,9 @@ class CloudSyncApp:
             else:
                 print("Opción inválida")
 
-
-    #Reportes Graphviz
+    # ============================
+    # REPORTES GRAPHVIZ
+    # ============================
     def menu_reportes(self):
         print("\n=== REPORTES GRAPHVIZ ===")
         print("1. Reporte de Centros de Datos")
@@ -336,9 +376,16 @@ class CloudSyncApp:
         elif opcion == "4":
             self.reportes.reporte_solicitudes()
 
+    # ============================
+    # HISTORIAL
+    # ============================
+    def menu_historial(self):
+        print("\n=== HISTORIAL DE OPERACIONES ===")
+        self.historial.mostrar()
+        input("Presiona Enter para continuar...")
 
 
-#Ejecicion del programa
+# Ejecución del programa
 if __name__ == "__main__":
     app = CloudSyncApp()
     app.iniciar()

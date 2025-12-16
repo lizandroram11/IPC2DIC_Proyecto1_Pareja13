@@ -1,15 +1,16 @@
 import graphviz
 
-class GestorReportes:
 
+class GestorReportes:
     def __init__(self, gestor_centros, gestor_vms, gestor_contenedores, gestor_solicitudes):
         self.centros = gestor_centros
         self.vms = gestor_vms
         self.contenedores = gestor_contenedores
         self.solicitudes = gestor_solicitudes
 
-    
-    #Reporte Centro de datos
+    # ============================================================
+    # REPORTE 1: CENTROS DE DATOS
+    # ============================================================
     def reporte_centros(self):
         grafo = graphviz.Digraph("CentrosDatos", format="png")
         grafo.attr(rankdir="LR", bgcolor="white")
@@ -23,13 +24,12 @@ class GestorReportes:
         while True:
             c = actual.valor
             etiqueta = f"""
-            {c.nombre}
-            ID: {c.id}
-            CPU: {c.cpu_usado}/{c.cpu_total}
-            RAM: {c.ram_usado}/{c.ram_total}
-            ALM: {c.alm_usado}/{c.alm_total}
-            """
-
+{c.nombre}
+ID: {c.id}
+CPU: {c.cpu_usado}/{c.cpu_total}
+RAM: {c.ram_usado}/{c.ram_total}
+ALM: {c.alm_usado}/{c.alm_total}
+"""
             grafo.node(c.id, etiqueta, shape="box", style="filled", fillcolor="lightblue")
 
             actual = actual.siguiente
@@ -49,9 +49,9 @@ class GestorReportes:
         grafo.render("reporte_centros", view=True)
         print("Reporte de centros generado: reporte_centros.png")
 
-
-
-       #Reporte VMs por centro
+    # ============================================================
+    # REPORTE 2: VMs POR CENTRO
+    # ============================================================
     def reporte_vms_por_centro(self):
         grafo = graphviz.Digraph("VMsPorCentro", format="png")
         grafo.attr(rankdir="LR", bgcolor="white")
@@ -67,12 +67,12 @@ class GestorReportes:
 
             # Nodo del centro
             etiqueta_centro = f"""
-            {centro.nombre}
-            ID: {centro.id}
-            CPU: {centro.cpu_usado}/{centro.cpu_total}
-            RAM: {centro.ram_usado}/{centro.ram_total}
-            ALM: {centro.alm_usado}/{centro.alm_total}
-            """
+{centro.nombre}
+ID: {centro.id}
+CPU: {centro.cpu_usado}/{centro.cpu_total}
+RAM: {centro.ram_usado}/{centro.ram_total}
+ALM: {centro.alm_usado}/{centro.alm_total}
+"""
 
             grafo.node(
                 centro.id,
@@ -84,16 +84,22 @@ class GestorReportes:
 
             # Recorrer VMs del centro
             nodo_vm = centro.vms.primero
+            if nodo_vm is None:
+                actual_centro = actual_centro.siguiente
+                if actual_centro == self.centros.centros.primero:
+                    break
+                continue
+
             while nodo_vm:
                 vm = nodo_vm.valor
 
                 etiqueta_vm = f"""
-                VM: {vm.id}
-                SO: {vm.so}
-                CPU: {vm.cpu}
-                RAM: {vm.ram}
-                ALM: {vm.alm}
-                """
+VM: {vm.id}
+SO: {vm.so}
+CPU: {vm.cpu}
+RAM: {vm.ram}
+ALM: {vm.almacenamiento}
+"""
 
                 grafo.node(
                     vm.id,
@@ -113,12 +119,12 @@ class GestorReportes:
                 break
 
         grafo.render("reporte_vms_por_centro", view=True)
-        print(" Reporte generado: reporte_vms_por_centro.png")
+        print("Reporte generado: reporte_vms_por_centro.png")
 
-
-    # REPORTE: CONTENEDORES POR VM
+    # ============================================================
+    # REPORTE 3: CONTENEDORES POR VM
+    # ============================================================
     def reporte_contenedores_por_vm(self):
-        
         grafo = graphviz.Digraph("ContenedoresPorVM", format="png")
         grafo.attr(rankdir="LR", bgcolor="white")
 
@@ -137,12 +143,12 @@ class GestorReportes:
 
                 # Nodo de la VM
                 etiqueta_vm = f"""
-                VM: {vm.id}
-                SO: {vm.so}
-                CPU: {vm.cpu}
-                RAM: {vm.ram}
-                ALM: {vm.alm}
-                """
+VM: {vm.id}
+SO: {vm.so}
+CPU: {vm.cpu}
+RAM: {vm.ram}
+ALM: {vm.almacenamiento}
+"""
 
                 grafo.node(
                     vm.id,
@@ -158,13 +164,13 @@ class GestorReportes:
                     cont = nodo_cont.valor
 
                     etiqueta_cont = f"""
-                    Contenedor: {cont.id}
-                    Nombre: {cont.nombre}
-                    Imagen: {cont.imagen}
-                    CPU: {cont.cpu}
-                    RAM: {cont.ram}
-                    Puerto: {cont.puerto}
-                    """
+Contenedor: {cont.id}
+Nombre: {cont.nombre}
+Imagen: {cont.imagen}
+CPU: {cont.cpu}
+RAM: {cont.ram}
+Puerto: {cont.puerto}
+"""
 
                     grafo.node(
                         cont.id,
@@ -188,18 +194,16 @@ class GestorReportes:
         grafo.render("reporte_contenedores_por_vm", view=True)
         print("Reporte generado: reporte_contenedores_por_vm.png")
 
-
-
-
+    # ============================================================
     # REPORTE 4: SOLICITUDES EN COLA
+    # ============================================================
     def reporte_solicitudes(self):
         grafo = graphviz.Digraph("Solicitudes", format="png")
         grafo.attr(rankdir="TB", bgcolor="white")
 
-        # Obtener la cola de solicitudes
         cola = self.solicitudes.cola
 
-        if cola.esta_vacia():
+        if cola.primero is None:
             print("No hay solicitudes en la cola")
             return
 
@@ -210,15 +214,15 @@ class GestorReportes:
             sol = actual.valor
 
             etiqueta = f"""
-            Solicitud: {sol.id}
-            Cliente: {sol.cliente}
-            Tipo: {sol.tipo}
-            Prioridad: {sol.prioridad}
-            CPU: {sol.cpu}
-            RAM: {sol.ram}
-            ALM: {sol.alm}
-            Tiempo: {sol.tiempo}
-            """
+Solicitud: {sol.id}
+Cliente: {sol.cliente}
+Tipo: {sol.tipo}
+Prioridad: {sol.prioridad}
+CPU: {sol.cpu}
+RAM: {sol.ram}
+ALM: {sol.almacenamiento}
+Tiempo: {sol.tiempo}
+"""
 
             grafo.node(
                 sol.id,
