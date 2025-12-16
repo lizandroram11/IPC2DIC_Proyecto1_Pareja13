@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" ?>
 <CloudSync>
     <CentrosDatos>
@@ -383,3 +384,7 @@
         </Solicitud>
     </Solicitudes>
 </CloudSync>
+=======
+<?xml version='1.0' encoding='utf-8'?>
+<CloudSync><CentrosDatos /><MaquinasVirtuales /><Solicitudes /></CloudSync>
+>>>>>>> 75e0dee (Implementación de solicitudes y pila de historial)

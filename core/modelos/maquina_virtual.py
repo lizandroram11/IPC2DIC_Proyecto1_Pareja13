@@ -14,3 +14,7 @@ class MaquinaVirtual:
 # Lista de contenedores dentro de la VM
         self.contenedores = ListaSimple()
 
+    def __str__(self):
+        return (f"VM {self.id} ({self.so})\n"
+                f"CPU: {self.cpu}, RAM: {self.ram}, ALM: {self.almacenamiento}\n"
+                f"IP: {self.ip}, Centro: {self.centro}, Estado: {self.estado}")

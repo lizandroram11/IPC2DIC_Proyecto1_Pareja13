@@ -89,6 +89,10 @@ class CloudSyncApp:
         ruta = input("Ingresa la ruta del archivo XML: ")
         self.lector.cargar_archivo(ruta)
 
+        id_centro = input("Ingresa el ID del centro de datos: ")
+        self.lector.mostrar_centro(id_centro)
+
+
    #Centro de Datos
     def menu_centros(self):
         print("\n=== GESTIÓN DE CENTROS DE DATOS ===")
@@ -231,8 +235,37 @@ class CloudSyncApp:
 
    #Contenedores
     def menu_contenedores(self):
-        print("\n=== GESTIÓN DE CONTENEDORES ===")
-        print("Esta sección se implementará más adelante.")
+        while True:
+            print("\n=== GESTIÓN DE CONTENEDORES ===")
+            print("1. Crear contenedor")
+            print("2. Listar contenedores")
+            print("3. Eliminar contenedor")
+            print("4. Volver")
+
+            sub = input("Selecciona una opción: ")
+
+            if sub == "1":
+                vm = input("ID de la VM: ")
+                nombre = input("Nombre del contenedor: ")
+                self.contenedores.agregar_contenedor(vm, nombre)
+                input("Presiona Enter para continuar...")
+
+            elif sub == "2":
+                vm = input("ID de la VM: ")
+                self.contenedores.listar_contenedores(vm)
+                input("Presiona Enter para continuar...")
+
+            elif sub == "3":
+                vm = input("ID de la VM: ")
+                nombre = input("Nombre del contenedor: ")
+                self.contenedores.eliminar_contenedor(vm, nombre)
+                input("Presiona Enter para continuar...")
+
+            elif sub == "4":
+                break
+            else:
+                print("Opción inválida")
+                input("Presiona Enter para continuar...")
 
     #Solicitudes
     def menu_solicitudes(self):
@@ -263,7 +296,6 @@ class CloudSyncApp:
             self.reportes.reporte_solicitudes()
 
 
-    
 
 #Ejecicion del programa
 if __name__ == "__main__":
