@@ -94,17 +94,17 @@ class CloudSyncApp:
             else:
                 print("Opción inválida")
 
-    # ============================
+
     # CARGAR XML
-    # ============================
     def menu_cargar_xml(self):
         print("\n=== CARGAR ARCHIVO XML ===")
         ruta = input("Ingresa la ruta del archivo XML: ")
         self.lector.cargar_archivo(ruta)
 
-    # ============================
+
+
+
     # CENTROS DE DATOS
-    # ============================
     def menu_centros(self):
         print("\n=== GESTIÓN DE CENTROS DE DATOS ===")
         print("1. Listar todos los centros")
@@ -168,9 +168,10 @@ class CloudSyncApp:
         print(f"RAM libre: {centro.ram_total - centro.ram_usado}")
         print(f"Almacenamiento libre: {centro.alm_total - centro.alm_usado}")
 
-    # ============================
+
+
+
     # MÁQUINAS VIRTUALES
-    # ============================
     def menu_vms(self):
         print("\n=== GESTIÓN DE MÁQUINAS VIRTUALES ===")
         print("1. Buscar VM por ID")
@@ -247,9 +248,8 @@ class CloudSyncApp:
         else:
             print("No se pudo migrar la VM")
 
-    # ============================
+
     # CONTENEDORES
-    # ============================
     def menu_contenedores(self):
         while True:
             print("\n=== GESTIÓN DE CONTENEDORES ===")
@@ -297,9 +297,9 @@ class CloudSyncApp:
                 print("Opción inválida")
                 input("Presiona Enter para continuar...")
 
-    # ============================
+
+
     # SOLICITUDES
-    # ============================
     def menu_solicitudes(self):
         while True:
             print("\n=== GESTIÓN DE SOLICITUDES ===")
@@ -351,9 +351,9 @@ class CloudSyncApp:
             else:
                 print("Opción inválida")
 
-    # ============================
+
+
     # REPORTES GRAPHVIZ
-    # ============================
     def menu_reportes(self):
         print("\n=== REPORTES GRAPHVIZ ===")
         print("1. Reporte de Centros de Datos")
@@ -376,9 +376,9 @@ class CloudSyncApp:
         elif opcion == "4":
             self.reportes.reporte_solicitudes()
 
-    # ============================
+
+
     # HISTORIAL
-    # ============================
     def menu_historial(self):
         print("\n=== HISTORIAL DE OPERACIONES ===")
         self.historial.mostrar()

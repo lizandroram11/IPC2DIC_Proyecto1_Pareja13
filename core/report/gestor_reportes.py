@@ -8,9 +8,9 @@ class GestorReportes:
         self.contenedores = gestor_contenedores
         self.solicitudes = gestor_solicitudes
 
-    # ============================================================
+
     # REPORTE 1: CENTROS DE DATOS
-    # ============================================================
+
     def reporte_centros(self):
         grafo = graphviz.Digraph("CentrosDatos", format="png")
         grafo.attr(rankdir="LR", bgcolor="white")
@@ -49,9 +49,9 @@ ALM: {c.alm_usado}/{c.alm_total}
         grafo.render("reporte_centros", view=True)
         print("Reporte de centros generado: reporte_centros.png")
 
-    # ============================================================
+
     # REPORTE 2: VMs POR CENTRO
-    # ============================================================
+
     def reporte_vms_por_centro(self):
         grafo = graphviz.Digraph("VMsPorCentro", format="png")
         grafo.attr(rankdir="LR", bgcolor="white")
@@ -121,9 +121,9 @@ ALM: {vm.almacenamiento}
         grafo.render("reporte_vms_por_centro", view=True)
         print("Reporte generado: reporte_vms_por_centro.png")
 
-    # ============================================================
+
     # REPORTE 3: CONTENEDORES POR VM
-    # ============================================================
+
     def reporte_contenedores_por_vm(self):
         grafo = graphviz.Digraph("ContenedoresPorVM", format="png")
         grafo.attr(rankdir="LR", bgcolor="white")
@@ -194,9 +194,9 @@ Puerto: {cont.puerto}
         grafo.render("reporte_contenedores_por_vm", view=True)
         print("Reporte generado: reporte_contenedores_por_vm.png")
 
-    # ============================================================
+
+
     # REPORTE 4: SOLICITUDES EN COLA
-    # ============================================================
     def reporte_solicitudes(self):
         grafo = graphviz.Digraph("Solicitudes", format="png")
         grafo.attr(rankdir="TB", bgcolor="white")
