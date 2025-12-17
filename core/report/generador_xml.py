@@ -1,4 +1,6 @@
 import xml.etree.ElementTree as ET
+import xml.dom.minidom as minidom
+
 
 class GeneradorXML:
     def __init__(self, gestor_centros, gestor_vms, gestor_contenedores, gestor_solicitudes):
@@ -7,10 +9,9 @@ class GeneradorXML:
         self.contenedores = gestor_contenedores
         self.solicitudes = gestor_solicitudes
 
-    # MÉTODO PRINCIPAL: Genera el archivo.xml, desde el menu principal se ingresa el nombre del archivo
+    # MÉTODO PRINCIPAL: Genera el archivo XML
     def generar_xml(self, ruta_salida="salida.xml"):
         
-        #estructura del archivo.xml para que la estructura sea razonable, uso de Pretty
         root = ET.Element("CloudSync")
 
         self._xml_centros(root)
@@ -21,7 +22,6 @@ class GeneradorXML:
         xml_str = ET.tostring(root, encoding="utf-8")
 
         # Pretty print con minidom
-        import xml.dom.minidom as minidom
         dom = minidom.parseString(xml_str)
         pretty_xml = dom.toprettyxml(indent="    ")
 
@@ -31,7 +31,8 @@ class GeneradorXML:
 
         print(f"XML generado correctamente en: {ruta_salida}")
 
-    # SECCIÓN: GESTOR DE CENTROS DE DATOS
+    
+    # SECCIÓN: CENTROS DE DATOS
     def _xml_centros(self, root):
         tag_centros = ET.SubElement(root, "CentrosDatos")
 
@@ -48,8 +49,8 @@ class GeneradorXML:
             })
 
             ubicacion = ET.SubElement(nodo_centro, "Ubicacion")
-            ET.SubElement(ubicacion, "Pais").text = centro.pais
-            ET.SubElement(ubicacion, "Ciudad").text = centro.ciudad
+            ET.SubElement(ubicacion, "Pais").text = centro.pais if centro.pais else ""
+            ET.SubElement(ubicacion, "Ciudad").text = centro.ciudad if centro.ciudad else ""
 
             capacidad = ET.SubElement(nodo_centro, "Capacidad")
             ET.SubElement(capacidad, "CPU").text = str(centro.cpu_total)
@@ -107,6 +108,7 @@ class GeneradorXML:
 
 
     # SECCIÓN: CONTENEDORES
+
     def _xml_contenedores(self, nodo_vm_xml, vm):
         tag_conts = ET.SubElement(nodo_vm_xml, "Contenedores")
 
@@ -129,9 +131,9 @@ class GeneradorXML:
 
             nodo_cont = nodo_cont.siguiente
 
-   
+
     # SECCIÓN: SOLICITUDES
-    
+
     def _xml_solicitudes(self, root):
         tag_solicitudes = ET.SubElement(root, "Solicitudes")
 

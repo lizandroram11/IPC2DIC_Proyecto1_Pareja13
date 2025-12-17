@@ -1,14 +1,20 @@
 import graphviz
 
-class GestorReportes:
 
+class GestorReportes:
     def __init__(self, gestor_centros, gestor_vms, gestor_contenedores, gestor_solicitudes):
         self.centros = gestor_centros
         self.vms = gestor_vms
         self.contenedores = gestor_contenedores
         self.solicitudes = gestor_solicitudes
 
+<<<<<<< HEAD
     # Reporte Centro de datos
+=======
+
+    # REPORTE 1: CENTROS DE DATOS
+
+>>>>>>> 28c78271bea7b9aa7d632fd86b60fbade3986713
     def reporte_centros(self):
         grafo = graphviz.Digraph("CentrosDatos", format="png")
         grafo.attr(rankdir="LR", bgcolor="white")
@@ -21,12 +27,21 @@ class GestorReportes:
         while True:
             c = actual.valor
             etiqueta = f"""
+<<<<<<< HEAD
             {c.nombre}
             ID: {c.id}
             CPU: {c.cpu_usado}/{c.cpu_total}
             RAM: {c.ram_usado}/{c.ram_total}
             ALM: {c.alm_usado}/{c.alm_total}
             """
+=======
+{c.nombre}
+ID: {c.id}
+CPU: {c.cpu_usado}/{c.cpu_total}
+RAM: {c.ram_usado}/{c.ram_total}
+ALM: {c.alm_usado}/{c.alm_total}
+"""
+>>>>>>> 28c78271bea7b9aa7d632fd86b60fbade3986713
             grafo.node(c.id, etiqueta, shape="box", style="filled", fillcolor="lightblue")
 
             actual = actual.siguiente
@@ -45,7 +60,13 @@ class GestorReportes:
         grafo.render("reporte_centros", view=True)
         print("Reporte de centros generado: reporte_centros.png")
 
+<<<<<<< HEAD
     # Reporte VMs por centro
+=======
+
+    # REPORTE 2: VMs POR CENTRO
+
+>>>>>>> 28c78271bea7b9aa7d632fd86b60fbade3986713
     def reporte_vms_por_centro(self):
         grafo = graphviz.Digraph("VMsPorCentro", format="png")
         grafo.attr(rankdir="LR", bgcolor="white")
@@ -58,6 +79,7 @@ class GestorReportes:
         while True:
             centro = actual_centro.valor
             etiqueta_centro = f"""
+<<<<<<< HEAD
             {centro.nombre}
             ID: {centro.id}
             CPU: {centro.cpu_usado}/{centro.cpu_total}
@@ -65,11 +87,26 @@ class GestorReportes:
             ALM: {centro.alm_usado}/{centro.alm_total}
             """
             grafo.node(centro.id, etiqueta_centro, shape="box", style="filled", fillcolor="lightblue")
+=======
+{centro.nombre}
+ID: {centro.id}
+CPU: {centro.cpu_usado}/{centro.cpu_total}
+RAM: {centro.ram_usado}/{centro.ram_total}
+ALM: {centro.alm_usado}/{centro.alm_total}
+"""
+>>>>>>> 28c78271bea7b9aa7d632fd86b60fbade3986713
 
             nodo_vm = centro.vms.primero
+            if nodo_vm is None:
+                actual_centro = actual_centro.siguiente
+                if actual_centro == self.centros.centros.primero:
+                    break
+                continue
+
             while nodo_vm:
                 vm = nodo_vm.valor
                 etiqueta_vm = f"""
+<<<<<<< HEAD
                 VM: {vm.id}
                 SO: {vm.so}
                 CPU: {vm.cpu}
@@ -77,6 +114,24 @@ class GestorReportes:
                 ALM: {vm.almacenamiento}
                 """
                 grafo.node(vm.id, etiqueta_vm, shape="ellipse", style="filled", fillcolor="lightyellow")
+=======
+VM: {vm.id}
+SO: {vm.so}
+CPU: {vm.cpu}
+RAM: {vm.ram}
+ALM: {vm.almacenamiento}
+"""
+
+                grafo.node(
+                    vm.id,
+                    etiqueta_vm,
+                    shape="ellipse",
+                    style="filled",
+                    fillcolor="lightyellow"
+                )
+
+                # Conexión centro → VM
+>>>>>>> 28c78271bea7b9aa7d632fd86b60fbade3986713
                 grafo.edge(centro.id, vm.id)
                 nodo_vm = nodo_vm.siguiente
 
@@ -87,7 +142,13 @@ class GestorReportes:
         grafo.render("reporte_vms_por_centro", view=True)
         print("Reporte generado: reporte_vms_por_centro.png")
 
+<<<<<<< HEAD
     # Reporte: Contenedores por VM
+=======
+
+    # REPORTE 3: CONTENEDORES POR VM
+
+>>>>>>> 28c78271bea7b9aa7d632fd86b60fbade3986713
     def reporte_contenedores_por_vm(self):
         grafo = graphviz.Digraph("ContenedoresPorVM", format="png")
         grafo.attr(rankdir="LR", bgcolor="white")
@@ -103,6 +164,7 @@ class GestorReportes:
             while nodo_vm:
                 vm = nodo_vm.valor
                 etiqueta_vm = f"""
+<<<<<<< HEAD
                 VM: {vm.id}
                 SO: {vm.so}
                 CPU: {vm.cpu}
@@ -110,11 +172,20 @@ class GestorReportes:
                 ALM: {vm.almacenamiento}
                 """
                 grafo.node(vm.id, etiqueta_vm, shape="box", style="filled", fillcolor="lightyellow")
+=======
+VM: {vm.id}
+SO: {vm.so}
+CPU: {vm.cpu}
+RAM: {vm.ram}
+ALM: {vm.almacenamiento}
+"""
+>>>>>>> 28c78271bea7b9aa7d632fd86b60fbade3986713
 
                 nodo_cont = vm.contenedores.primero
                 while nodo_cont:
                     cont = nodo_cont.valor
                     etiqueta_cont = f"""
+<<<<<<< HEAD
                     Contenedor: {cont.id}
                     Nombre: {cont.nombre}
                     Imagen: {cont.imagen}
@@ -123,6 +194,25 @@ class GestorReportes:
                     Puerto: {cont.puerto}
                     """
                     grafo.node(cont.id, etiqueta_cont, shape="ellipse", style="filled", fillcolor="lightgreen")
+=======
+Contenedor: {cont.id}
+Nombre: {cont.nombre}
+Imagen: {cont.imagen}
+CPU: {cont.cpu}
+RAM: {cont.ram}
+Puerto: {cont.puerto}
+"""
+
+                    grafo.node(
+                        cont.id,
+                        etiqueta_cont,
+                        shape="ellipse",
+                        style="filled",
+                        fillcolor="lightgreen"
+                    )
+
+                    # Conexión VM → Contenedor
+>>>>>>> 28c78271bea7b9aa7d632fd86b60fbade3986713
                     grafo.edge(vm.id, cont.id)
                     nodo_cont = nodo_cont.siguiente
 
@@ -135,13 +225,24 @@ class GestorReportes:
         grafo.render("reporte_contenedores_por_vm", view=True)
         print("Reporte generado: reporte_contenedores_por_vm.png")
 
+<<<<<<< HEAD
     # Reporte: Solicitudes en cola
+=======
+
+
+    # REPORTE 4: SOLICITUDES EN COLA
+>>>>>>> 28c78271bea7b9aa7d632fd86b60fbade3986713
     def reporte_solicitudes(self):
         grafo = graphviz.Digraph("Solicitudes", format="png")
         grafo.attr(rankdir="TB", bgcolor="white")
 
         cola = self.solicitudes.cola
+<<<<<<< HEAD
         if cola.esta_vacia():
+=======
+
+        if cola.primero is None:
+>>>>>>> 28c78271bea7b9aa7d632fd86b60fbade3986713
             print("No hay solicitudes en la cola")
             return
 
@@ -150,6 +251,7 @@ class GestorReportes:
         while actual:
             sol = actual.valor
             etiqueta = f"""
+<<<<<<< HEAD
             Solicitud: {sol.id}
             Cliente: {sol.cliente}
             Tipo: {sol.tipo}
@@ -160,6 +262,17 @@ class GestorReportes:
             Tiempo: {sol.tiempo}
             """
             grafo.node(sol.id, etiqueta, shape="box", style="filled", fillcolor="lightcoral")
+=======
+Solicitud: {sol.id}
+Cliente: {sol.cliente}
+Tipo: {sol.tipo}
+Prioridad: {sol.prioridad}
+CPU: {sol.cpu}
+RAM: {sol.ram}
+ALM: {sol.almacenamiento}
+Tiempo: {sol.tiempo}
+"""
+>>>>>>> 28c78271bea7b9aa7d632fd86b60fbade3986713
 
             if anterior_id:
                 grafo.edge(anterior_id, sol.id)

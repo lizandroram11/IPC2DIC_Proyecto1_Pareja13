@@ -56,6 +56,29 @@ class GestorSolicitudes:
 
         return procesadas, completadas, fallidas
 
+
+    # Listar solicitudes en la cola
+    def listar(self):
+        if self.cola.primero is None:
+            print("\nNo hay solicitudes en la cola")
+            return
+
+        print("\n=== SOLICITUDES EN COLA ===")
+        actual = self.cola.primero
+
+        while actual:
+            sol = actual.valor
+            print(f"\nSolicitud {sol.id}")
+            print(f"  Cliente: {sol.cliente}")
+            print(f"  Tipo: {sol.tipo}")
+            print(f"  Prioridad: {sol.prioridad}")
+            print(f"  CPU: {sol.cpu}")
+            print(f"  RAM: {sol.ram}")
+            print(f"  Almacenamiento: {sol.almacenamiento}")
+            print(f"  Tiempo estimado: {sol.tiempo}")
+
+            actual = actual.siguiente
+
     
     # Procesar solicitud tipo Deploy
     def _procesar_deploy(self, solicitud):

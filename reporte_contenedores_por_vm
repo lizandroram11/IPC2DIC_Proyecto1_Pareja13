@@ -1,0 +1,28 @@
+digraph ContenedoresPorVM {
+	bgcolor=white rankdir=LR
+	VM001 [label="
+VM: VM001
+SO: Ubuntu 22.04 LTS
+CPU: 8
+RAM: 16
+ALM: 100
+" fillcolor=lightyellow shape=box style=filled]
+	CNT001 [label="
+Contenedor: CNT001
+Nombre: WebServer
+Imagen: nginx:latest
+CPU: 25
+RAM: 512
+Puerto: 8080
+" fillcolor=lightgreen shape=ellipse style=filled]
+	VM001 -> CNT001
+	CNT002 [label="
+Contenedor: CNT002
+Nombre: Database
+Imagen: mysql:8.0
+CPU: 40
+RAM: 1024
+Puerto: 3306
+" fillcolor=lightgreen shape=ellipse style=filled]
+	VM001 -> CNT002
+}

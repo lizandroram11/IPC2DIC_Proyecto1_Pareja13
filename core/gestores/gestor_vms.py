@@ -1,5 +1,6 @@
 from core.modelos.maquina_virtual import MaquinaVirtual
 
+
 class GestorVMs:
     def __init__(self, gestor_centros):
         # Referencia al gestor de centros para acceder a los recursos
@@ -78,7 +79,6 @@ class GestorVMs:
 
         return True
 
-    # Eliminar VM de un centro (ListaSimple)
     def _eliminar_vm_de_centro(self, centro, vm_id):
         actual = centro.vms.primero
         anterior = None

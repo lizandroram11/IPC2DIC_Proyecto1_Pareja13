@@ -2,6 +2,7 @@ from core.modelos.contenedor import Contenedor
 
 class GestorContenedores:
     def __init__(self, gestor_vms):
+        # gestor_vms es una instancia de GestorVMs
         self.vms = gestor_vms
 
 
@@ -108,3 +109,4 @@ class GestorContenedores:
 
         print("Error: Contenedor no encontrado.")
         return False
+    

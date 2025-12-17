@@ -1,0 +1,13 @@
+digraph Solicitudes {
+	bgcolor=white rankdir=TB
+	vm003 [label="
+Solicitud: vm003
+Cliente: HUGO
+Tipo: Deploy
+Prioridad: 1
+CPU: 8
+RAM: 16
+ALM: 100
+Tiempo: 3
+" fillcolor=lightcoral shape=box style=filled]
+}

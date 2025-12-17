@@ -1,5 +1,4 @@
 import xml.etree.ElementTree as ET
-
 from core.modelos.centro_datos import CentroDatos
 from core.modelos.maquina_virtual import MaquinaVirtual
 from core.modelos.contenedor import Contenedor

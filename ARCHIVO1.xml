@@ -1,0 +1,117 @@
+<?xml version="1.0" ?>
+<CloudSync>
+    <CentrosDatos>
+        <Centro id="DC001" nombre="DataCenter Norte">
+            <Ubicacion>
+                <Pais>Guatemala</Pais>
+                <Ciudad>Guatemala City</Ciudad>
+            </Ubicacion>
+            <Capacidad>
+                <CPU>128</CPU>
+                <RAM>512</RAM>
+                <Almacenamiento>1000</Almacenamiento>
+            </Capacidad>
+            <UsoActual>
+                <CPU>-8</CPU>
+                <RAM>-16</RAM>
+                <Almacenamiento>-100</Almacenamiento>
+            </UsoActual>
+        </Centro>
+        <Centro id="DC002" nombre="DataCenter Sur">
+            <Ubicacion>
+                <Pais>Guatemala</Pais>
+                <Ciudad>Escuintla</Ciudad>
+            </Ubicacion>
+            <Capacidad>
+                <CPU>256</CPU>
+                <RAM>1024</RAM>
+                <Almacenamiento>2000</Almacenamiento>
+            </Capacidad>
+            <UsoActual>
+                <CPU>0</CPU>
+                <RAM>0</RAM>
+                <Almacenamiento>0</Almacenamiento>
+            </UsoActual>
+        </Centro>
+        <Centro id="DC003" nombre="DataCenter Occidente">
+            <Ubicacion>
+                <Pais>Guatemala</Pais>
+                <Ciudad>Quetzaltenango</Ciudad>
+            </Ubicacion>
+            <Capacidad>
+                <CPU>192</CPU>
+                <RAM>768</RAM>
+                <Almacenamiento>1500</Almacenamiento>
+            </Capacidad>
+            <UsoActual>
+                <CPU>0</CPU>
+                <RAM>0</RAM>
+                <Almacenamiento>0</Almacenamiento>
+            </UsoActual>
+        </Centro>
+        <Centro id="DC004" nombre="DataCenter Oriente">
+            <Ubicacion>
+                <Pais>Guatemala</Pais>
+                <Ciudad>Zacapa</Ciudad>
+            </Ubicacion>
+            <Capacidad>
+                <CPU>96</CPU>
+                <RAM>384</RAM>
+                <Almacenamiento>800</Almacenamiento>
+            </Capacidad>
+            <UsoActual>
+                <CPU>0</CPU>
+                <RAM>0</RAM>
+                <Almacenamiento>0</Almacenamiento>
+            </UsoActual>
+        </Centro>
+        <Centro id="DC005" nombre="DataCenter Central">
+            <Ubicacion>
+                <Pais>Guatemala</Pais>
+                <Ciudad>Antigua Guatemala</Ciudad>
+            </Ubicacion>
+            <Capacidad>
+                <CPU>320</CPU>
+                <RAM>1536</RAM>
+                <Almacenamiento>3000</Almacenamiento>
+            </Capacidad>
+            <UsoActual>
+                <CPU>8</CPU>
+                <RAM>16</RAM>
+                <Almacenamiento>100</Almacenamiento>
+            </UsoActual>
+        </Centro>
+    </CentrosDatos>
+    <MaquinasVirtuales>
+        <VM id="VM001" centroAsignado="DC005">
+            <SO>Ubuntu 22.04 LTS</SO>
+            <Recursos>
+                <CPU>8</CPU>
+                <RAM>16</RAM>
+                <Almacenamiento>100</Almacenamiento>
+            </Recursos>
+            <IP>192.168.1.10</IP>
+            <Contenedores>
+                <Contenedor id="CNT001">
+                    <Nombre>WebServer</Nombre>
+                    <Imagen>nginx:latest</Imagen>
+                    <Recursos>
+                        <CPU>25</CPU>
+                        <RAM>512</RAM>
+                    </Recursos>
+                    <Puerto>8080</Puerto>
+                </Contenedor>
+                <Contenedor id="CNT002">
+                    <Nombre>Database</Nombre>
+                    <Imagen>mysql:8.0</Imagen>
+                    <Recursos>
+                        <CPU>40</CPU>
+                        <RAM>1024</RAM>
+                    </Recursos>
+                    <Puerto>3306</Puerto>
+                </Contenedor>
+            </Contenedores>
+        </VM>
+    </MaquinasVirtuales>
+    <Solicitudes/>
+</CloudSync>
