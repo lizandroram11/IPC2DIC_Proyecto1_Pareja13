@@ -8,8 +8,7 @@ class GestorReportes:
         self.contenedores = gestor_contenedores
         self.solicitudes = gestor_solicitudes
 
-    
-    #Reporte Centro de datos
+    # Reporte Centro de datos
     def reporte_centros(self):
         grafo = graphviz.Digraph("CentrosDatos", format="png")
         grafo.attr(rankdir="LR", bgcolor="white")
@@ -19,7 +18,6 @@ class GestorReportes:
             print("No hay centros para graficar")
             return
 
-        # Crear nodos
         while True:
             c = actual.valor
             etiqueta = f"""
@@ -29,19 +27,17 @@ class GestorReportes:
             RAM: {c.ram_usado}/{c.ram_total}
             ALM: {c.alm_usado}/{c.alm_total}
             """
-
             grafo.node(c.id, etiqueta, shape="box", style="filled", fillcolor="lightblue")
 
             actual = actual.siguiente
             if actual == self.centros.centros.primero:
                 break
 
-        # Crear conexiones (lista circular)
+        # Conexiones (lista circular)
         actual = self.centros.centros.primero
         while True:
             siguiente = actual.siguiente
             grafo.edge(actual.valor.id, siguiente.valor.id)
-
             actual = siguiente
             if actual == self.centros.centros.primero:
                 break
@@ -49,9 +45,7 @@ class GestorReportes:
         grafo.render("reporte_centros", view=True)
         print("Reporte de centros generado: reporte_centros.png")
 
-
-
-       #Reporte VMs por centro
+    # Reporte VMs por centro
     def reporte_vms_por_centro(self):
         grafo = graphviz.Digraph("VMsPorCentro", format="png")
         grafo.attr(rankdir="LR", bgcolor="white")
@@ -61,11 +55,8 @@ class GestorReportes:
             print("No hay centros para graficar")
             return
 
-        # Recorrer centros
         while True:
             centro = actual_centro.valor
-
-            # Nodo del centro
             etiqueta_centro = f"""
             {centro.nombre}
             ID: {centro.id}
@@ -73,39 +64,20 @@ class GestorReportes:
             RAM: {centro.ram_usado}/{centro.ram_total}
             ALM: {centro.alm_usado}/{centro.alm_total}
             """
+            grafo.node(centro.id, etiqueta_centro, shape="box", style="filled", fillcolor="lightblue")
 
-            grafo.node(
-                centro.id,
-                etiqueta_centro,
-                shape="box",
-                style="filled",
-                fillcolor="lightblue"
-            )
-
-            # Recorrer VMs del centro
             nodo_vm = centro.vms.primero
             while nodo_vm:
                 vm = nodo_vm.valor
-
                 etiqueta_vm = f"""
                 VM: {vm.id}
                 SO: {vm.so}
                 CPU: {vm.cpu}
                 RAM: {vm.ram}
-                ALM: {vm.alm}
+                ALM: {vm.almacenamiento}
                 """
-
-                grafo.node(
-                    vm.id,
-                    etiqueta_vm,
-                    shape="ellipse",
-                    style="filled",
-                    fillcolor="lightyellow"
-                )
-
-                # Conexión centro → VM
+                grafo.node(vm.id, etiqueta_vm, shape="ellipse", style="filled", fillcolor="lightyellow")
                 grafo.edge(centro.id, vm.id)
-
                 nodo_vm = nodo_vm.siguiente
 
             actual_centro = actual_centro.siguiente
@@ -113,12 +85,10 @@ class GestorReportes:
                 break
 
         grafo.render("reporte_vms_por_centro", view=True)
-        print(" Reporte generado: reporte_vms_por_centro.png")
+        print("Reporte generado: reporte_vms_por_centro.png")
 
-
-    # REPORTE: CONTENEDORES POR VM
+    # Reporte: Contenedores por VM
     def reporte_contenedores_por_vm(self):
-        
         grafo = graphviz.Digraph("ContenedoresPorVM", format="png")
         grafo.attr(rankdir="LR", bgcolor="white")
 
@@ -127,36 +97,23 @@ class GestorReportes:
             print("No hay centros para graficar")
             return
 
-        # Recorrer centros
         while True:
             centro = actual_centro.valor
-
             nodo_vm = centro.vms.primero
             while nodo_vm:
                 vm = nodo_vm.valor
-
-                # Nodo de la VM
                 etiqueta_vm = f"""
                 VM: {vm.id}
                 SO: {vm.so}
                 CPU: {vm.cpu}
                 RAM: {vm.ram}
-                ALM: {vm.alm}
+                ALM: {vm.almacenamiento}
                 """
+                grafo.node(vm.id, etiqueta_vm, shape="box", style="filled", fillcolor="lightyellow")
 
-                grafo.node(
-                    vm.id,
-                    etiqueta_vm,
-                    shape="box",
-                    style="filled",
-                    fillcolor="lightyellow"
-                )
-
-                # Recorrer contenedores de la VM
                 nodo_cont = vm.contenedores.primero
                 while nodo_cont:
                     cont = nodo_cont.valor
-
                     etiqueta_cont = f"""
                     Contenedor: {cont.id}
                     Nombre: {cont.nombre}
@@ -165,18 +122,8 @@ class GestorReportes:
                     RAM: {cont.ram}
                     Puerto: {cont.puerto}
                     """
-
-                    grafo.node(
-                        cont.id,
-                        etiqueta_cont,
-                        shape="ellipse",
-                        style="filled",
-                        fillcolor="lightgreen"
-                    )
-
-                    # Conexión VM → Contenedor
+                    grafo.node(cont.id, etiqueta_cont, shape="ellipse", style="filled", fillcolor="lightgreen")
                     grafo.edge(vm.id, cont.id)
-
                     nodo_cont = nodo_cont.siguiente
 
                 nodo_vm = nodo_vm.siguiente
@@ -188,27 +135,20 @@ class GestorReportes:
         grafo.render("reporte_contenedores_por_vm", view=True)
         print("Reporte generado: reporte_contenedores_por_vm.png")
 
-
-
-
-    # REPORTE 4: SOLICITUDES EN COLA
+    # Reporte: Solicitudes en cola
     def reporte_solicitudes(self):
         grafo = graphviz.Digraph("Solicitudes", format="png")
         grafo.attr(rankdir="TB", bgcolor="white")
 
-        # Obtener la cola de solicitudes
         cola = self.solicitudes.cola
-
         if cola.esta_vacia():
             print("No hay solicitudes en la cola")
             return
 
         actual = cola.primero
         anterior_id = None
-
         while actual:
             sol = actual.valor
-
             etiqueta = f"""
             Solicitud: {sol.id}
             Cliente: {sol.cliente}
@@ -216,19 +156,11 @@ class GestorReportes:
             Prioridad: {sol.prioridad}
             CPU: {sol.cpu}
             RAM: {sol.ram}
-            ALM: {sol.alm}
+            ALM: {sol.almacenamiento}
             Tiempo: {sol.tiempo}
             """
+            grafo.node(sol.id, etiqueta, shape="box", style="filled", fillcolor="lightcoral")
 
-            grafo.node(
-                sol.id,
-                etiqueta,
-                shape="box",
-                style="filled",
-                fillcolor="lightcoral"
-            )
-
-            # Conectar solicitudes en orden de prioridad
             if anterior_id:
                 grafo.edge(anterior_id, sol.id)
 

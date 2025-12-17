@@ -74,11 +74,11 @@ class LectorXML:
 
             cpu = int(safe_text(nodo, "recursos/cpu", "cpu", id))
             ram = int(safe_text(nodo, "recursos/ram", "ram", id))
-            alm = int(safe_text(nodo, "recursos/almacenamiento", "almacenamiento", id))
+            almacenamiento = int(safe_text(nodo, "recursos/almacenamiento", "almacenamiento", id))
 
             ip = safe_text(nodo, "ip", "ip", id)
 
-            vm = MaquinaVirtual(id, so, cpu, ram, alm, ip, centro_asignado)
+            vm = MaquinaVirtual(id, so, cpu, ram, almacenamiento, ip, centro_asignado)
             self.vms.agregar_vm(vm, centro_asignado)
 
             print(f"VM {id} cargada en {centro_asignado}")
@@ -117,11 +117,11 @@ class LectorXML:
 
             cpu = int(safe_text(nodo, "recursos/cpu", "cpu", id))
             ram = int(safe_text(nodo, "recursos/ram", "ram", id))
-            alm = int(safe_text(nodo, "recursos/almacenamiento", "almacenamiento", id))
+            almacenamiento = int(safe_text(nodo, "recursos/almacenamiento", "almacenamiento", id))
 
             tiempo = int(safe_text(nodo, "tiempoEstimado", "tiempoEstimado", id))
 
-            solicitud = Solicitud(id, cliente, tipo, prioridad, cpu, ram, alm, tiempo)
+            solicitud = Solicitud(id, cliente, tipo, prioridad, cpu, ram, almacenamiento, tiempo)
             self.solicitudes.agregar(solicitud)
 
             print(f"Solicitud {id} cargada")
@@ -151,9 +151,9 @@ class LectorXML:
 
         cpu = int(safe_text(nodo, "cpu", "cpu", id_vm))
         ram = int(safe_text(nodo, "ram", "ram", id_vm))
-        alm = int(safe_text(nodo, "almacenamiento", "almacenamiento", id_vm))
+        almacenamiento = int(safe_text(nodo, "almacenamiento", "almacenamiento", id_vm))
 
-        vm = MaquinaVirtual(id_vm, so, cpu, ram, alm, "0.0.0.0", centro)
+        vm = MaquinaVirtual(id_vm, so, cpu, ram, almacenamiento, "0.0.0.0", centro)
 
         resultado = self.vms.crear_vm_instruccion(vm, centro)
 
