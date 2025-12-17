@@ -6,6 +6,7 @@ from core.report.generador_xml import GeneradorXML
 from core.xml.lector_xml import LectorXML
 from core.report.gestor_reportes import GestorReportes
 from core.estructuras.pila import Pila
+from core.modelos.solicitud import Solicitud
 
 
 class CloudSyncApp:
@@ -17,10 +18,8 @@ class CloudSyncApp:
         self.contenedores = GestorContenedores(self.vms)
         self.solicitudes = GestorSolicitudes()
 
-        # Conectar gestores entre sí
         self.solicitudes.conectar_gestores(self.centros, self.vms)
 
-        #Lector XML
         self.lector = LectorXML(
             self.centros,
             self.vms,
@@ -28,17 +27,15 @@ class CloudSyncApp:
             self.solicitudes
         )
 
-       #Gestor de Reportes
         self.reportes = GestorReportes(
             self.centros,
             self.vms,
             self.contenedores,
             self.solicitudes
         )
-    # Historial de operaciones (Pila)
+   
         self.historial = Pila()
 
-    #Menu Principal
     def iniciar(self):
         while True:
             print("\n=== CLOUDSYNC MANAGER - SISTEMA DE NUBE ===")
@@ -86,14 +83,15 @@ class CloudSyncApp:
             else:
                 print("Opción inválida")
 
-   #Cargar XML
+
     def menu_cargar_xml(self):
         print("\n=== CARGAR ARCHIVO XML ===")
         ruta = input("Ingresa la ruta del archivo XML: ")
         self.lector.cargar_archivo(ruta)
 
+        print("\nPresiona Enter para regresar al menú...")
+        input()
 
-   #Centro de Datos
     def menu_centros(self):
         print("\n=== GESTIÓN DE CENTROS DE DATOS ===")
         print("1. Listar todos los centros")
@@ -157,7 +155,7 @@ class CloudSyncApp:
         print(f"RAM libre: {centro.ram_total - centro.ram_usado}")
         print(f"Almacenamiento libre: {centro.alm_total - centro.alm_usado}")
 
-    #VMs
+    
     def menu_vms(self):
         print("\n=== GESTIÓN DE MÁQUINAS VIRTUALES ===")
         print("1. Buscar VM por ID")
@@ -212,7 +210,6 @@ class CloudSyncApp:
             return
 
         print(f"\n=== VMs en {centro.nombre} ===")
-
         nodo = centro.vms.primero
         if nodo is None:
             print("No hay VMs en este centro")
@@ -234,44 +231,59 @@ class CloudSyncApp:
         else:
             print("No se pudo migrar la VM")
 
-   #Contenedores
     def menu_contenedores(self):
         while True:
             print("\n=== GESTIÓN DE CONTENEDORES ===")
-            print("1. Crear contenedor")
-            print("2. Listar contenedores")
-            print("3. Eliminar contenedor")
-            print("4. Volver")
+            print("1. Desplegar contenedor en VM")
+            print("2. Listar contenedores de una VM")
+            print("3. Cambiar estado de un contenedor")
+            print("4. Eliminar contenedor de una VM")
+            print("5. Volver al menú principal")
 
-            sub = input("Selecciona una opción: ")
+            opcion = input("Selecciona una opción: ")
 
-            if sub == "1":
-                vm = input("ID de la VM: ")
+            if opcion == "1":
+                vm_id = input("ID de la VM donde desplegar el contenedor: ")
                 nombre = input("Nombre del contenedor: ")
-                self.contenedores.agregar_contenedor(vm, nombre)
-                self.historial.push(f"Contenedor {nombre} creado en VM {vm}")
-                input("Presiona Enter para continuar...")
+                imagen = input("Imagen (ej: nginx:latest): ")
+                cpu = int(input("CPU requerido (%): "))
+                ram = int(input("RAM requerido (MB): "))
+                puerto = input("Puerto: ")
+                self.contenedores.desplegar_contenedor(vm_id, nombre, imagen, cpu, ram, puerto)
+                print("\nPresiona Enter para continuar...")
+                input()
 
-            elif sub == "2":
-                vm = input("ID de la VM: ")
-                self.contenedores.listar_contenedores(vm)
-                input("Presiona Enter para continuar...")
+            elif opcion == "2":
+                vm_id = input("ID de la VM: ")
+                self.contenedores.listar_contenedores(vm_id)
+                print("\nPresiona Enter para continuar...")
+                input()
 
-            elif sub == "3":
-                vm = input("ID de la VM: ")
-                nombre = input("Nombre del contenedor: ")
-                self.contenedores.eliminar_contenedor(vm, nombre)
-                self.historial.push(f"Contenedor {nombre} eliminado de VM {vm}")
-                input("Presiona Enter para continuar...")
+            elif opcion == "3":
+                vm_id = input("ID de la VM: ")
+                cont_id = input("ID del contenedor: ")
+                nuevo_estado = input("Nuevo estado (Running, Paused, Restarted, Stopped): ")
+                self.contenedores.cambiar_estado_contenedor(vm_id, cont_id, nuevo_estado)
+                self.historial.push(f"Contenedor {cont_id} en VM {vm_id} cambiado a {nuevo_estado}")
+                print("\nPresiona Enter para continuar...")
+                input()
 
-            elif sub == "4":
+            elif opcion == "4":
+                vm_id = input("ID de la VM: ")
+                cont_id = input("ID del contenedor a eliminar: ")
+                self.contenedores.eliminar_contenedor(vm_id, cont_id)
+                print("\nPresiona Enter para continuar...")
+                input()
+
+            elif opcion == "5":
                 break
-            else:
-                print("Opción inválida")
-                input("Presiona Enter para continuar...")
 
+            else:
+                print("Opción inválida. Intenta de nuevo.")
+
+  
     #Solicitudes
-    def menu_solicitudes(self):
+def menu_solicitudes(self):
         while True:
             print("\n=== GESTIÓN DE SOLICITUDES ===")
             print("1. Agregar nueva solicitud")
@@ -314,7 +326,7 @@ class CloudSyncApp:
 
 
     #Reportes Graphviz
-    def menu_reportes(self):
+def menu_reportes(self):
         print("\n=== REPORTES GRAPHVIZ ===")
         print("1. Reporte de Centros de Datos")
         print("2. Reporte de VMs por Centro")
